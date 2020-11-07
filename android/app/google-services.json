@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "804098936400",
+    "firebase_url": "https://huynh-map2020-mytodo-5ac2f.firebaseio.com",
+    "project_id": "huynh-map2020-mytodo-5ac2f",
+    "storage_bucket": "huynh-map2020-mytodo-5ac2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:804098936400:android:e693893cf535fb52930b55",
+        "android_client_info": {
+          "package_name": "edu.uco.khuynh2.map2020.term_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "804098936400-s5rfb8ervd9cp6ifmc10qglq7f2peh3p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDon5PlqAYPFMKIWmk-D4z7VWH0ylgzi0I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "804098936400-s5rfb8ervd9cp6ifmc10qglq7f2peh3p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

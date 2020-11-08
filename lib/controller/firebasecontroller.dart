@@ -8,4 +8,9 @@ class FireBaseController {
     );
     return auth.user;
   }
+
+  static Future<void> signUp(String email, String password) async {
+    await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+  }
 }

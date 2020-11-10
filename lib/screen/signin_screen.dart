@@ -2,7 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/signup_screen.dart';
+import 'package:term_project/screen/todo_screen.dart';
 import 'package:term_project/screen/view/mydialog.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -99,11 +101,12 @@ class _Controller {
     }
     _state.formKey.currentState.save();
     MyDialog.circularProgressStart(_state.context);
-    // print("--------------User email: $email password: $password");
+    //print("--------------User email: $email password: $password");
 
-    //FirebaseUser user;
+    // push to ToDo
+    FirebaseUser user;
     try {
-      var user = await FireBaseController.signIn(email, password);
+      user = await FireBaseController.signIn(email, password);
       print('USER: $user');
     } catch (e) {
       MyDialog.circularProgressStart(_state.context);
@@ -113,8 +116,22 @@ class _Controller {
         title: 'Sign In Error',
         content: e.message ?? e.toString(),
       );
+      return;
     }
-    return;
+
+    try {
+//List<User> userProfile = await F
+      MyDialog.CircularProgressEnd(_state.context);
+      Navigator.pushReplacementNamed(_state.context, ToDoScreen.routeName,
+          arguments: {'user': user});
+    } catch (e) {
+      MyDialog.CircularProgressEnd(_state.context);
+      MyDialog.info(
+        context: _state.context,
+        title: 'Firebase/Firestore error',
+        content: 'Cannot get user Profile. Try again later! \n ${e.message}',
+      );
+    }
   }
 
   //Validate

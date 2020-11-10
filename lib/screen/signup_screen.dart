@@ -40,10 +40,19 @@ class _SignUpState extends State<SignUpScreen> {
           child: Column(
             children: <Widget>[
               Text(
-                'create an account',
+                'Create an account',
                 style: TextStyle(
                   fontSize: 25.0,
                 ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Username',
+                ),
+                keyboardType: TextInputType.name,
+                autocorrect: false,
+                validator: con.validatorUsername,
+                onSaved: con.onSavedUser,
               ),
               TextFormField(
                 decoration: InputDecoration(
@@ -96,6 +105,7 @@ class _SignUpState extends State<SignUpScreen> {
 class _Controller {
   _SignUpState _state;
   _Controller(this._state);
+  String username;
   String email;
   String password;
 
@@ -120,6 +130,15 @@ class _Controller {
   }
 
 //validate
+  String validatorUsername(String value) {
+    Pattern pattern = r"^[a-zA-Z0-9]{4,10}$";
+    RegExp regex = new RegExp(pattern);
+    if (!regex.hasMatch(value))
+      return 'Username must be min 4 and contains no special characters ';
+    else
+      return null;
+  }
+
   String validatorEmail(String value) {
     Pattern pattern =
         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
@@ -149,6 +168,10 @@ class _Controller {
   }
 
 //save
+  void onSavedUser(String value) {
+    this.username = value;
+  }
+
   void onSavedEmail(String value) {
     this.email = value;
   }

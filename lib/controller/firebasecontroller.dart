@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class FireBaseController {
   static Future signIn(String email, String password) async {
@@ -13,4 +16,18 @@ class FireBaseController {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
   }
+
+    static Future<void> signOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
+
+
+  static Future<Map<String, String>> uploadStorage({
+    @required String uid,
+    @required String email,
+    @required String username,
+    @required File image,
+    @required Function listener,
+
+  }) async {}
 }

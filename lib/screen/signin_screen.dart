@@ -88,6 +88,7 @@ class _SignInState extends State<SignInScreen> {
 class _Controller {
   _SignInState _state;
   _Controller(this._state);
+
   String email;
   String password;
 
@@ -101,7 +102,7 @@ class _Controller {
     }
     _state.formKey.currentState.save();
     MyDialog.circularProgressStart(_state.context);
-    //print("--------------User email: $email password: $password");
+    print("--------------User email: $email is Signing in");
 
     // push to ToDo
     FirebaseUser user;
@@ -120,10 +121,12 @@ class _Controller {
     }
 
     try {
-//List<User> userProfile = await F
+      List<User> userProfile =
+          await FireBaseController.getUserProfile(user.email);
+
       MyDialog.CircularProgressEnd(_state.context);
       Navigator.pushReplacementNamed(_state.context, ToDoScreen.routeName,
-          arguments: {'user': user});
+          arguments: {'user': user, 'userProfile': userProfile});
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);
       MyDialog.info(

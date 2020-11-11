@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/model/userprofile.dart';
 import 'view/mydialog.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -115,6 +117,17 @@ class _Controller {
 
     try {
       FireBaseController.signUp(email, password);
+      MyDialog.circularProgressStart(_state.context);
+      //save userProfile
+      var u = User(
+        userName: username,
+        email: email,
+        userRole: 'user',
+      );
+      u.userId = await FireBaseController.addUserProfile(u);
+      MyDialog.CircularProgressEnd(_state.context);
+      Navigator.pop(_state.context);
+
       MyDialog.info(
         context: _state.context,
         title: 'Account Successfully created',

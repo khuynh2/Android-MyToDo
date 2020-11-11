@@ -31,7 +31,8 @@ class _ToDoState extends State<ToDoScreen> {
     // TODO: implement build
     Map arg = ModalRoute.of(context).settings.arguments;
     user ??= arg['user'];
-    //userProfile ??= arg['userProfile'];
+    userProfile ??= arg['userProfile'];
+
     return Scaffold(
       appBar: AppBar(
         title: Text('My To Do'),
@@ -40,11 +41,7 @@ class _ToDoState extends State<ToDoScreen> {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              currentAccountPicture: ClipOval(
-                  // child: MyImageView.netowrk(
-                  //     imageUrl: user.photoUrl, context: context),
-                  ),
-              accountName: Text(user.displayName ?? 'N/A'),
+              accountName: Text('${userProfile[0].userName}'),
               accountEmail: Text(user.email),
             ),
             ListTile(

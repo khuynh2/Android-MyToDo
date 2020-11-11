@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/userprofile.dart';
+import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
 
 class ToDoScreen extends StatefulWidget {
@@ -76,5 +77,12 @@ class _Controller {
       print('signOut exception: ${e.message}');
     }
     Navigator.pushReplacementNamed(_state.context, SignInScreen.routeName);
+  }
+
+  void settings() async {
+    await Navigator.pushNamed(_state.context, SettingsScreen.routeName,
+        arguments: {'user': _state.user, 'userProfile': _state.userProfile});
+    await _state.user.reload();
+    Navigator.pop(_state.context);
   }
 }

@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:term_project/model/userprofile.dart';
+
+import 'view/mydialog.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/homeScreen/settingsScreen';
@@ -16,6 +21,7 @@ class _SettingsState extends State<SettingsScreen> {
   _Controller con;
   FirebaseUser user;
   List<User> userProfile;
+  File image;
   var formKey = GlobalKey<FormState>();
 
   @override
@@ -48,6 +54,15 @@ class _SettingsState extends State<SettingsScreen> {
                     style: TextStyle(fontSize: 20.0),
                   ),
                   Container(),
+                  RaisedButton(
+                      color: Colors.blue,
+                      onPressed: con.getPicture,
+                      child: Text(
+                        'Change',
+                        style: TextStyle(fontSize: 20.0, color: Colors.white),
+                      )),
+                  Text('Username: ${userProfile[0].userName}'),
+                  Text('Theme: ')
                 ],
               ),
             )));
@@ -56,6 +71,26 @@ class _SettingsState extends State<SettingsScreen> {
 
 class _Controller {
   _SettingsState _state;
+  File imageFile;
 
   _Controller(this._state);
+
+  void test() {
+    print('working');
+  }
+
+  Future<void> getPicture() async {
+    try {
+      print('Picking image');
+      PickedFile _image;
+      _image = await ImagePicker().getImage(source: ImageSource.gallery);
+      _state.render(() => imageFile = File(_image.path));
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Image capture error',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
 }

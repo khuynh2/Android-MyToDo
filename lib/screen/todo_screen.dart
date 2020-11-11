@@ -46,17 +46,17 @@ class _ToDoState extends State<ToDoScreen> {
               accountEmail: Text(user.email),
             ),
             ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Sign out'),
-              onTap: con.signOut,
-            ),
-            ListTile(
               leading: Icon(
                 Icons.settings,
               ),
               title: Text('Settings'),
-              //onTap: con.settings,
-            )
+              onTap: con.settings,
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Sign out'),
+              onTap: con.signOut,
+            ),
           ],
         ),
       ),

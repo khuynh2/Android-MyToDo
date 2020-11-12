@@ -60,7 +60,6 @@ class _SettingsState extends State<SettingsScreen> {
                         : Image.file(con.imageFile, fit: BoxFit.fill),
                   ),
                   RaisedButton(
-                      color: Colors.blue,
                       onPressed: con.getPicture,
                       child: Text(
                         'Change',

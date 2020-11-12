@@ -34,36 +34,39 @@ class _ToDoState extends State<ToDoScreen> {
     user ??= arg['user'];
     userProfile ??= arg['userProfile'];
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('MyToDo'),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text('${userProfile[0].userName}'),
-              accountEmail: Text(user.email),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.settings,
-              ),
-              title: Text('Settings'),
-              onTap: con.settings,
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text('Sign out'),
-              onTap: con.signOut,
-            ),
-          ],
+    return WillPopScope(
+      onWillPop: () => Future.value(false),
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('MyToDo'),
         ),
+        drawer: Drawer(
+          child: ListView(
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                accountName: Text('${userProfile[0].userName}'),
+                accountEmail: Text(user.email),
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.settings,
+                ),
+                title: Text('Settings'),
+                onTap: con.settings,
+              ),
+              ListTile(
+                leading: Icon(Icons.exit_to_app),
+                title: Text('Sign out'),
+                onTap: con.signOut,
+              ),
+            ],
+          ),
+        ),
+        floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.indigo[800], child: Icon(Icons.add)),
+        body: Text('To Do List',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
       ),
-      floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.indigo[800], child: Icon(Icons.add)),
-      body: Text('To Do List',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
     );
   }
 }

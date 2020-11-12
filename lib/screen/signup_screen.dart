@@ -126,6 +126,7 @@ class _Controller {
     _state.formKey.currentState.save();
 
     //bool check = await FireBaseController.signUpCheck(email, password);
+    //
 
     if (true) {
       try {

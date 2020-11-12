@@ -14,6 +14,18 @@ class FireBaseController {
     return auth.user;
   }
 
+  static Future<bool> signUpCheck(String email, String password) async {
+    AuthResult auth = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+    if (auth.additionalUserInfo.isNewUser) {
+      print('==============Creating new account');
+      return true;
+    } else {
+      print('==============Email already used');
+      return false;
+    }
+  }
+
   static Future<void> signUp(String email, String password) async {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);

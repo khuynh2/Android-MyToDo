@@ -14,7 +14,14 @@ class MyApp extends StatelessWidget {
     var materialApp = MaterialApp(
       initialRoute: SignInScreen.routeName,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        brightness: Brightness.dark,
+        primaryColor: Colors.grey[800],
+        fontFamily: 'Monospace',
+        buttonTheme: ButtonThemeData(
+            buttonColor: Colors.indigo[800],
+            shape: RoundedRectangleBorder(
+              borderRadius: new BorderRadius.circular(8.0),
+            )),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       routes: {

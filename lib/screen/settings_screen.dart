@@ -53,7 +53,12 @@ class _SettingsState extends State<SettingsScreen> {
                     'Profile',
                     style: TextStyle(fontSize: 20.0),
                   ),
-                  Container(),
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    child: con.imageFile == null
+                        ? Text('No image avliable')
+                        : Image.file(con.imageFile, fit: BoxFit.fill),
+                  ),
                   RaisedButton(
                       color: Colors.blue,
                       onPressed: con.getPicture,

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:core';
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
@@ -36,67 +37,76 @@ class _SignUpState extends State<SignUpScreen> {
       appBar: AppBar(
         title: Text('Create an account'),
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Create an account',
-                style: TextStyle(
-                  fontSize: 25.0,
-                ),
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Username',
-                ),
-                keyboardType: TextInputType.name,
-                autocorrect: false,
-                validator: con.validatorUsername,
-                onSaved: con.onSavedUser,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Email',
-                ),
-                keyboardType: TextInputType.emailAddress,
-                autocorrect: false,
-                validator: con.validatorEmail,
-                onSaved: con.onSavedEmail,
-              ),
-              TextFormField(
-                controller: _pass,
-                decoration: InputDecoration(
-                  hintText: 'Password',
-                ),
-                obscureText: true,
-                keyboardType: TextInputType.visiblePassword,
-                autocorrect: false,
-                validator: con.validatorPassword,
-                onSaved: con.onSavedPassword,
-              ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: 'Password confirm',
-                ),
-                obscureText: true,
-                keyboardType: TextInputType.visiblePassword,
-                autocorrect: false,
-                validator: con.validatorPasswordConfirm,
-              ),
-              RaisedButton(
-                child: Text(
-                  'Create',
+      body: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/signin.png"),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: SingleChildScrollView(
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Text(
+                  'Create an account',
                   style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
+                    fontSize: 25.0,
                   ),
                 ),
-                color: Colors.blue,
-                onPressed: con.signUp,
-              )
-            ],
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Username',
+                  ),
+                  keyboardType: TextInputType.name,
+                  autocorrect: false,
+                  validator: con.validatorUsername,
+                  onSaved: con.onSavedUser,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Email',
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  autocorrect: false,
+                  validator: con.validatorEmail,
+                  onSaved: con.onSavedEmail,
+                ),
+                TextFormField(
+                  controller: _pass,
+                  decoration: InputDecoration(
+                    hintText: 'Password',
+                  ),
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  autocorrect: false,
+                  validator: con.validatorPassword,
+                  onSaved: con.onSavedPassword,
+                ),
+                TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Password confirm',
+                  ),
+                  obscureText: true,
+                  keyboardType: TextInputType.visiblePassword,
+                  autocorrect: false,
+                  validator: con.validatorPasswordConfirm,
+                ),
+                RaisedButton(
+                  child: Text(
+                    'Create',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                    ),
+                  ),
+                  onPressed: con.signUp,
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -115,29 +125,40 @@ class _Controller {
     if (!_state.formKey.currentState.validate()) return;
     _state.formKey.currentState.save();
 
-    try {
-      FireBaseController.signUp(email, password);
-      MyDialog.circularProgressStart(_state.context);
-      //save userProfile
-      var u = User(
-        userName: username,
-        email: email,
-        userRole: 'user',
-      );
-      u.userId = await FireBaseController.addUserProfile(u);
-      MyDialog.CircularProgressEnd(_state.context);
-      Navigator.pop(_state.context);
+    //bool check = await FireBaseController.signUpCheck(email, password);
 
+    if (true) {
+      try {
+        await FireBaseController.signUp(email, password);
+        MyDialog.circularProgressStart(_state.context);
+        //save userProfile
+        var u = User(
+          userName: username,
+          email: email,
+          userRole: 'user',
+        );
+
+        u.userId = await FireBaseController.addUserProfile(u);
+        // MyDialog.CircularProgressEnd(_state.context);
+        Navigator.pop(_state.context);
+
+        MyDialog.info(
+          context: _state.context,
+          title: 'Account Successfully created',
+          content: 'Your account is created! Go to Sign in',
+        );
+      } catch (e) {
+        MyDialog.info(
+          context: _state.context,
+          title: 'Error',
+          content: e.message ?? e.toString(),
+        );
+      }
+    } else {
       MyDialog.info(
         context: _state.context,
-        title: 'Account Successfully created',
-        content: 'Your account is created! Go to Sign in',
-      );
-    } catch (e) {
-      MyDialog.info(
-        context: _state.context,
-        title: 'Error',
-        content: e.message ?? e.toString(),
+        title: 'Account already existed',
+        content: 'Please use different email',
       );
     }
   }

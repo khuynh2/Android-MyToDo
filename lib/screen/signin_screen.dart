@@ -32,53 +32,61 @@ class _SignInState extends State<SignInScreen> {
         appBar: AppBar(
           title: Text('Sign In'),
         ),
-        body: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: <Widget>[
-                Stack(
-                  children: <Widget>[
-                    Text('My To Do',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 25))
-                  ],
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Email',
+        body: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/signin.png"),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Stack(
+                    children: <Widget>[
+                      Text('My To Do',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 25))
+                    ],
                   ),
-                  autocorrect: false,
-                  validator: con.validatorEmail,
-                  onSaved: con.onSavedEmail,
-                ),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: 'Password',
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Email',
+                    ),
+                    autocorrect: false,
+                    validator: con.validatorEmail,
+                    onSaved: con.onSavedEmail,
                   ),
-                  obscureText: true,
-                  autocorrect: false,
-                  validator: con.validatorPassword,
-                  onSaved: con.onSavedPassword,
-                ),
-                RaisedButton(
-                  child: Text(
-                    'Sign In',
-                    style: TextStyle(fontSize: 20.0, color: Colors.white),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      hintText: 'Password',
+                    ),
+                    obscureText: true,
+                    autocorrect: false,
+                    validator: con.validatorPassword,
+                    onSaved: con.onSavedPassword,
                   ),
-                  color: Colors.blue,
-                  onPressed: con.signIn,
-                ),
-                SizedBox(height: 20),
-                RaisedButton(
-                  child: Text(
-                    'Sign Up',
-                    style: TextStyle(fontSize: 20.0, color: Colors.white),
+                  RaisedButton(
+                    child: Text(
+                      'Sign In',
+                      style: TextStyle(fontSize: 20.0, color: Colors.white),
+                    ),
+                    onPressed: con.signIn,
                   ),
-                  color: Colors.blue,
-                  onPressed: con.signUp,
-                ),
-              ],
+                  SizedBox(height: 20),
+                  RaisedButton(
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(fontSize: 20.0, color: Colors.white),
+                    ),
+                    onPressed: con.signUp,
+                  ),
+                ],
+              ),
             ),
           ),
         ));
@@ -152,7 +160,7 @@ class _Controller {
     Pattern pattern = r'^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(value))
-      return 'password must be min 6 characters, has at least 1 number, 1 letter';
+      return 'password must be min 6 characters, has min 1 number, 1 letter';
     else
       return null;
   }

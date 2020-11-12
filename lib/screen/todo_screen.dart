@@ -36,7 +36,7 @@ class _ToDoState extends State<ToDoScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('My To Do'),
+        title: Text('MyToDo'),
       ),
       drawer: Drawer(
         child: ListView(
@@ -60,8 +60,10 @@ class _ToDoState extends State<ToDoScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(),
-      body: Text("data"),
+      floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.indigo[800], child: Icon(Icons.add)),
+      body: Text('To Do List',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
     );
   }
 }

@@ -7,8 +7,10 @@ import 'package:image_picker/image_picker.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 
 import 'package:term_project/model/userprofile.dart';
+import 'package:term_project/screen/todo_screen.dart';
 
 import 'view/mydialog.dart';
+import 'view/myimageview.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const routeName = '/homeScreen/settingsScreen';
@@ -62,7 +64,9 @@ class _SettingsState extends State<SettingsScreen> {
                   Container(
                     width: MediaQuery.of(context).size.width,
                     child: con.imageFile == null
-                        ? Text('No image avliable')
+                        ? MyImageView.netowrk(
+                            imageUrl: userProfile[0].userImageURL,
+                            context: context)
                         : Image.file(con.imageFile, fit: BoxFit.fill),
                   ),
                   RaisedButton(
@@ -135,9 +139,16 @@ class _Controller {
             userImage: profile['path'],
             userImageURL: profile['url']);
 
-        // userP.userId = await FireBaseController.addUserProfile(userP);
         await FireBaseController.updateUserProfile(userP, _state.userProfile);
         MyDialog.CircularProgressEnd(_state.context);
+
+        await Navigator.pushNamed(_state.context, ToDoScreen.routeName,
+            arguments: {
+              'user': _state.user,
+              'userProfile': _state.userProfile
+            });
+
+        //Navigator.pop(_state.context);
       }
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);

@@ -6,6 +6,8 @@ import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
 
+import 'view/myimageview.dart';
+
 class ToDoScreen extends StatefulWidget {
   static const routeName = '/signInScreen/todoScreen';
   @override
@@ -27,6 +29,8 @@ class _ToDoState extends State<ToDoScreen> {
     con = _Controller(this);
   }
 
+  void render(fn) => setState(fn);
+
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -44,6 +48,8 @@ class _ToDoState extends State<ToDoScreen> {
           child: ListView(
             children: <Widget>[
               UserAccountsDrawerHeader(
+                currentAccountPicture: MyImageView.netowrk(
+                    imageUrl: userProfile[0].userImageURL, context: context),
                 accountName: Text('${userProfile[0].userName}'),
                 accountEmail: Text(user.email),
               ),
@@ -88,6 +94,13 @@ class _Controller {
     await Navigator.pushNamed(_state.context, SettingsScreen.routeName,
         arguments: {'user': _state.user, 'userProfile': _state.userProfile});
     await _state.user.reload();
+
     Navigator.pop(_state.context);
   }
+
+  // void addMyToDo() async {
+  //   await Navigator.pushNamed(_state.context, AddToDoScreen.routName,
+  //       arguments: {'user': _state.user, 'photoMemoList': _state.photoMemos});
+  //   _state.render(() {});
+  // }
 }

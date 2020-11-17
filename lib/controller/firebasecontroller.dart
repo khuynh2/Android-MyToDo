@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:term_project/model/userprofile.dart';
 
@@ -42,6 +43,13 @@ class FireBaseController {
     return ref.documentID;
   }
 
+  static Future<void> updateUserProfile(User user) async {
+    await Firestore.instance
+        .collection(User.COLLECTION)
+        .document(user.userId)
+        .setData(user.serializeUser());
+  }
+
   static Future<List<User>> getUserProfile(String email) async {
     QuerySnapshot querySnapshot = await Firestore.instance
         .collection(User.COLLECTION)
@@ -59,9 +67,23 @@ class FireBaseController {
 
   static Future<Map<String, String>> uploadStorage({
     @required String uid,
-    @required String email,
-    @required String username,
     @required File image,
     @required Function listener,
-  }) async {}
+  }) async {
+    String imagePath;
+    imagePath ??= '${User.USER_IMAGE}/$uid/${DateTime.now()}';
+
+    StorageUploadTask task =
+        FirebaseStorage.instance.ref().child(imagePath).putFile(image);
+    task.events.listen((event) {
+      double percentage = (event.snapshot.bytesTransferred.toDouble() /
+              event.snapshot.totalByteCount.toDouble()) *
+          100;
+      listener(percentage);
+    });
+    var download = await task.onComplete;
+    String url = await download.ref.getDownloadURL();
+
+    return {'url': url, 'path': imagePath};
+  }
 }

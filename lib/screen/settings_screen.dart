@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:term_project/controller/firebasecontroller.dart';
+
 import 'package:term_project/model/userprofile.dart';
 
 import 'view/mydialog.dart';
@@ -21,6 +23,7 @@ class _SettingsState extends State<SettingsScreen> {
   _Controller con;
   FirebaseUser user;
   List<User> userProfile;
+
   File image;
   var formKey = GlobalKey<FormState>();
 
@@ -43,6 +46,9 @@ class _SettingsState extends State<SettingsScreen> {
     return Scaffold(
         appBar: AppBar(
           title: Text('Settings'),
+          actions: <Widget>[
+            IconButton(icon: Icon(Icons.check), onPressed: con.save)
+          ],
         ),
         body: Form(
             key: formKey,
@@ -76,6 +82,7 @@ class _SettingsState extends State<SettingsScreen> {
 class _Controller {
   _SettingsState _state;
   File imageFile;
+  String uploadProgressMessage;
 
   _Controller(this._state);
 
@@ -93,6 +100,45 @@ class _Controller {
       MyDialog.info(
         context: _state.context,
         title: 'Image capture error',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void save() async {
+    if (!_state.formKey.currentState.validate()) return;
+
+    _state.formKey.currentState.save();
+
+    //upload to storage
+    try {
+      MyDialog.circularProgressStart(_state.context);
+      if (imageFile != null) {
+        Map<String, String> profile = await FireBaseController.uploadStorage(
+            uid: _state.user.uid,
+            image: imageFile,
+            listener: (double progressPercentage) {
+              _state.render(() {
+                uploadProgressMessage =
+                    'Uploading: ${progressPercentage.toStringAsFixed(1)}';
+              });
+            });
+
+        print('========= ${profile["path"]}');
+        print('========= ${profile["url"]}');
+
+        // var userP =
+        //     User(userImage: profile['path'], userImageURL: profile['url']);
+
+        // userP.userId = await FireBaseController.addUserProfile(userP);
+        //await FireBaseController.updateUserProfile(_state.userProfile);
+        MyDialog.CircularProgressEnd(_state.context);
+      }
+    } catch (e) {
+      MyDialog.CircularProgressEnd(_state.context);
+      MyDialog.info(
+        context: _state.context,
+        title: 'Firebase Error',
         content: e.message ?? e.toString(),
       );
     }

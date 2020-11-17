@@ -4,15 +4,23 @@ class User {
   static const USERNAME = 'userName';
   static const EMAIL = 'email';
   static const USER_IMAGE = 'userImage';
+  static const IMAGE_URL = 'userImageURL';
   static const USER_ROLE = 'userRole';
 
   String userId;
   String userName;
   String email;
-  String userImage;
+  String userImage; //path to image
+  String userImageURL; //url for internet access
   String userRole;
 
-  User({this.userId, this.userName, this.email, this.userImage, this.userRole});
+  User(
+      {this.userId,
+      this.userName,
+      this.email,
+      this.userImage,
+      this.userRole,
+      this.userImageURL});
 
   //map User dart to fb
   Map<String, dynamic> serializeUser() {
@@ -20,6 +28,7 @@ class User {
       USERNAME: userName,
       EMAIL: email,
       USER_IMAGE: userImage,
+      IMAGE_URL: userImageURL,
       USER_ROLE: userRole,
     };
   }
@@ -30,6 +39,7 @@ class User {
       email: data[User.EMAIL],
       userName: data[User.USERNAME],
       userImage: data[User.USER_IMAGE],
+      userImageURL: data[User.IMAGE_URL],
       userRole: data[User.USER_ROLE],
     );
   }

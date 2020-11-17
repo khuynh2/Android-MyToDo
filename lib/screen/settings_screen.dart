@@ -127,11 +127,16 @@ class _Controller {
         print('========= ${profile["path"]}');
         print('========= ${profile["url"]}');
 
-        User userP =
-            User(userImage: profile['path'], userImageURL: profile['url']);
+        print('updating profile for user ${_state.userProfile[0].email}');
+        User userP = User(
+            email: _state.userProfile[0].email,
+            userName: _state.userProfile[0].userName,
+            userRole: _state.userProfile[0].userRole,
+            userImage: profile['path'],
+            userImageURL: profile['url']);
 
         // userP.userId = await FireBaseController.addUserProfile(userP);
-        await FireBaseController.updateUserProfile(userP);
+        await FireBaseController.updateUserProfile(userP, _state.userProfile);
         MyDialog.CircularProgressEnd(_state.context);
       }
     } catch (e) {

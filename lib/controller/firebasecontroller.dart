@@ -43,11 +43,12 @@ class FireBaseController {
     return ref.documentID;
   }
 
-  static Future<void> updateUserProfile(User user) async {
+  static Future<void> updateUserProfile(
+      User user, List<User> userProfile) async {
     await Firestore.instance
         .collection(User.COLLECTION)
-        .document(user.userId)
-        .setData(user.serializeUser());
+        .document('${userProfile[0].userId}')
+        .setData(user.serializeUser(), merge: true);
   }
 
   static Future<List<User>> getUserProfile(String email) async {

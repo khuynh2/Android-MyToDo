@@ -127,11 +127,11 @@ class _Controller {
         print('========= ${profile["path"]}');
         print('========= ${profile["url"]}');
 
-        // var userP =
-        //     User(userImage: profile['path'], userImageURL: profile['url']);
+        User userP =
+            User(userImage: profile['path'], userImageURL: profile['url']);
 
         // userP.userId = await FireBaseController.addUserProfile(userP);
-        //await FireBaseController.updateUserProfile(_state.userProfile);
+        await FireBaseController.updateUserProfile(userP);
         MyDialog.CircularProgressEnd(_state.context);
       }
     } catch (e) {

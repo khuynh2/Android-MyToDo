@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/userprofile.dart';
+import 'package:term_project/screen/addtodo_screen.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
 
@@ -69,7 +70,10 @@ class _ToDoState extends State<ToDoScreen> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.indigo[800], child: Icon(Icons.add)),
+          backgroundColor: Colors.indigo[800],
+          child: Icon(Icons.add),
+          onPressed: con.addMyToDo,
+        ),
         body: Text('To Do List',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25)),
       ),
@@ -98,9 +102,9 @@ class _Controller {
     Navigator.pop(_state.context);
   }
 
-  // void addMyToDo() async {
-  //   await Navigator.pushNamed(_state.context, AddToDoScreen.routName,
-  //       arguments: {'user': _state.user, 'photoMemoList': _state.photoMemos});
-  //   _state.render(() {});
-  // }
+  void addMyToDo() async {
+    await Navigator.pushNamed(_state.context, AddToDoScreen.routName,
+        arguments: {'user': _state.user, 'userProfile': _state.userProfile});
+    _state.render(() {});
+  }
 }

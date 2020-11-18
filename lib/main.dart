@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:term_project/screen/addtodo_screen.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
 import 'package:term_project/screen/signup_screen.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         SignUpScreen.routeName: (context) => SignUpScreen(),
         ToDoScreen.routeName: (context) => ToDoScreen(),
         SettingsScreen.routeName: (context) => SettingsScreen(),
+        AddToDoScreen.routName: (context) => AddToDoScreen(),
       },
     );
     return materialApp;

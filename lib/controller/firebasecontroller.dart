@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
 
 class FireBaseController {
@@ -86,5 +87,14 @@ class FireBaseController {
     String url = await download.ref.getDownloadURL();
 
     return {'url': url, 'path': imagePath};
+  }
+
+// TODO LIST
+
+  static Future<String> addToDo(ToDoList todo) async {
+    DocumentReference ref = await Firestore.instance
+        .collection(ToDoList.COLLECTION)
+        .add(todo.serialize());
+    return ref.documentID;
   }
 }

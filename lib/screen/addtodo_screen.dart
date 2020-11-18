@@ -22,6 +22,7 @@ class _AddToDoState extends State<AddToDoScreen> {
   var formKey = GlobalKey<FormState>();
   FirebaseUser user;
   List<User> userProfile;
+  List<ToDoList> todoList;
 
   @override
   void initState() {
@@ -38,6 +39,7 @@ class _AddToDoState extends State<AddToDoScreen> {
     Map arg = ModalRoute.of(context).settings.arguments;
     user ??= arg['user'];
     userProfile ??= arg['userProfile'];
+    todoList ??= arg['todoList'];
     return Scaffold(
         appBar: AppBar(
           title: Text('Add new to do'),
@@ -158,6 +160,7 @@ class _Controller {
       );
 
       td.userId = await FireBaseController.addToDo(td);
+      // _state.todoList.insert(0, td);
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);

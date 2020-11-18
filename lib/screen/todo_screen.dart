@@ -119,14 +119,18 @@ class _Controller {
     await Navigator.pushNamed(_state.context, SettingsScreen.routeName,
         arguments: {'user': _state.user, 'userProfile': _state.userProfile});
     _state.render(() {});
-    await _state.user.reload();
+    // await _state.user.reload();
 
-    Navigator.pop(_state.context);
+    //   Navigator.pop(_state.context);
   }
 
   void addMyToDo() async {
     await Navigator.pushNamed(_state.context, AddToDoScreen.routName,
-        arguments: {'user': _state.user, 'userProfile': _state.userProfile});
+        arguments: {
+          'user': _state.user,
+          'userProfile': _state.userProfile,
+          'todoList': _state.todoList
+        });
     _state.render(() {});
   }
 

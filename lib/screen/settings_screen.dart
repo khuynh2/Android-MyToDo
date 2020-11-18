@@ -131,7 +131,8 @@ class _Controller {
         print('========= ${profile["path"]}');
         print('========= ${profile["url"]}');
 
-        print('updating profile for user ${_state.userProfile[0].email}');
+        print(
+            '========= updating profile for user ${_state.userProfile[0].email}');
         User userP = User(
             email: _state.userProfile[0].email,
             userName: _state.userProfile[0].userName,
@@ -142,13 +143,14 @@ class _Controller {
         await FireBaseController.updateUserProfile(userP, _state.userProfile);
         MyDialog.CircularProgressEnd(_state.context);
 
-        await Navigator.pushNamed(_state.context, ToDoScreen.routeName,
-            arguments: {
-              'user': _state.user,
-              'userProfile': _state.userProfile
-            });
+        // await Navigator.pushNamed(_state.context, ToDoScreen.routeName,
+        //     arguments: {
+        //       'user': _state.user,
+        //       'userProfile': _state.userProfile
+        //     });
 
-        //Navigator.pop(_state.context);
+        _state.userProfile.insert(0, userP);
+        Navigator.pop(_state.context);
       }
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);

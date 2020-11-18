@@ -5,7 +5,7 @@ class ToDoList {
   static const NOTE = 'NOTE';
   static const DUE_DATE = 'dueDate';
   static const TAGS = 'tags';
-  static const COMPLETE = 'complte';
+  static const COMPLETE = 'complete';
 
   String userId;
   String email;

@@ -7,17 +7,17 @@ import 'package:term_project/model/userprofile.dart';
 
 import 'view/mydialog.dart';
 
-class AddToDoScreen extends StatefulWidget {
-  static const routName = '/todoScreen/addToDoScreen';
+class EditToDoScreen extends StatefulWidget {
+  static const routName = '/todoScreen/editToDoScreen';
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
-    return _AddToDoState();
+    return _EditToDoState();
   }
 }
 
-class _AddToDoState extends State<AddToDoScreen> {
+class _EditToDoState extends State<EditToDoScreen> {
   _Controller con;
   var formKey = GlobalKey<FormState>();
   FirebaseUser user;
@@ -42,11 +42,11 @@ class _AddToDoState extends State<AddToDoScreen> {
     todoList ??= arg['todoList'];
     return Scaffold(
         appBar: AppBar(
-          title: Text('Add new to do'),
+          title: Text('Edit to do'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.check),
-              onPressed: con.save,
+              //onPressed: con.save,
             )
           ],
         ),
@@ -139,7 +139,7 @@ class _AddToDoState extends State<AddToDoScreen> {
 }
 
 class _Controller {
-  _AddToDoState _state;
+  _EditToDoState _state;
   _Controller(this._state);
 
   String title;
@@ -181,14 +181,6 @@ class _Controller {
       return null;
     }
   }
-
-  // String validatorNote(String value) {
-  //   if (value == null || value.trim().length < 3) {
-  //     return 'min 3 chars';
-  //   } else {
-  //     return null;
-  //   }
-  // }
 
 //save
   String onSavedTitle(String value) {

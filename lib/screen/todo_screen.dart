@@ -5,9 +5,11 @@ import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/addtodo_screen.dart';
+import 'package:term_project/screen/edittodo_screen.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
 
+import 'view/mydialog.dart';
 import 'view/myimageview.dart';
 
 class ToDoScreen extends StatefulWidget {
@@ -85,15 +87,18 @@ class _ToDoState extends State<ToDoScreen> {
               : ListView.builder(
                   itemCount: todoList.length,
                   itemBuilder: (BuildContext contet, int index) => Container(
-                    child: ListTile(
-                      leading: Checkbox(
-                          value: todoList[index].complete,
-                          onChanged: (bool value) {
-                            con.completeToDo(value, index);
-                          }),
-                      title: Text(todoList[index].title),
-                      trailing: IconButton(
-                          icon: Icon(Icons.mode_edit), onPressed: null),
+                    child: Card(
+                      child: ListTile(
+                          leading: Checkbox(
+                              value: todoList[index].complete,
+                              onChanged: (bool value) {
+                                con.completeToDo(value, index);
+                              }),
+                          title: Text(todoList[index].title),
+                          trailing: IconButton(
+                            icon: Icon(Icons.mode_edit),
+                            onPressed: con.editToDo,
+                          )),
                     ),
                   ),
                 )),
@@ -134,10 +139,32 @@ class _Controller {
     _state.render(() {});
   }
 
-  void completeToDo(bool value, int index) {
-    _state.todoList[index].complete = value;
-    print(
-        'complete ${_state.todoList[index].title} = ${_state.todoList[index].complete}');
+  Future<void> completeToDo(bool value, int index) async {
+    try {
+      _state.todoList[index].complete = value;
+      await FireBaseController.updateToDoComp(value, _state.todoList, index);
+      print(
+          'complete ${_state.todoList[index].title} = ${_state.todoList[index].complete}');
+      _state.render(() {});
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Completion error',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  void editToDo() async {
+    await Navigator.pushNamed(_state.context, EditToDoScreen.routName,
+        arguments: {
+          'user': _state.user,
+          'userProfile': _state.userProfile,
+          'todoList': _state.todoList
+        });
     _state.render(() {});
+    // await _state.user.reload();
+
+    //   Navigator.pop(_state.context);
   }
 }

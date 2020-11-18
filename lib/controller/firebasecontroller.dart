@@ -114,10 +114,10 @@ class FireBaseController {
   }
 
   static Future<void> updateToDoComp(
-      ToDoList todo, List<ToDoList> todoList) async {
+      bool value, List<ToDoList> todoList, int index) async {
     await Firestore.instance
-        .collection(ToDoList.COLLECTION)
-        .document(todo.userId)
-        .setData(todo.serialize(), merge: true);
+        .collection('todoList')
+        .document('${todoList[index].userId}')
+        .setData({'complete': value}, merge: true);
   }
 }

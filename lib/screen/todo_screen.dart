@@ -87,7 +87,10 @@ class _ToDoState extends State<ToDoScreen> {
                   itemBuilder: (BuildContext contet, int index) => Container(
                     child: ListTile(
                       leading: Checkbox(
-                          value: todoList[index].complete, onChanged: null),
+                          value: todoList[index].complete,
+                          onChanged: (bool value) {
+                            con.completeToDo(value, index);
+                          }),
                       title: Text(todoList[index].title),
                       trailing: IconButton(
                           icon: Icon(Icons.mode_edit), onPressed: null),
@@ -101,6 +104,7 @@ class _ToDoState extends State<ToDoScreen> {
 class _Controller {
   _ToDoState _state;
   _Controller(this._state);
+  bool complete;
 
   Future<void> signOut() async {
     try {
@@ -126,5 +130,10 @@ class _Controller {
     _state.render(() {});
   }
 
-  void complete() async {}
+  void completeToDo(bool value, int index) {
+    _state.todoList[index].complete = value;
+    print(
+        'complete ${_state.todoList[index].title} = ${_state.todoList[index].complete}');
+    _state.render(() {});
+  }
 }

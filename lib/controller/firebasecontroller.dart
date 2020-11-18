@@ -112,4 +112,12 @@ class FireBaseController {
     }
     return todolist;
   }
+
+  static Future<void> updateToDoComp(
+      ToDoList todo, List<ToDoList> todoList) async {
+    await Firestore.instance
+        .collection(ToDoList.COLLECTION)
+        .document(todo.userId)
+        .setData(todo.serialize(), merge: true);
+  }
 }

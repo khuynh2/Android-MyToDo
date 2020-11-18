@@ -160,7 +160,7 @@ class _Controller {
       );
 
       td.userId = await FireBaseController.addToDo(td);
-      // _state.todoList.insert(0, td);
+      _state.todoList.insert(0, td);
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);

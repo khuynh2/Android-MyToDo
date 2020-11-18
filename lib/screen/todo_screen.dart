@@ -87,18 +87,30 @@ class _ToDoState extends State<ToDoScreen> {
               : ListView.builder(
                   itemCount: todoList.length,
                   itemBuilder: (BuildContext contet, int index) => Container(
-                    child: Card(
-                      child: ListTile(
+                    child: Container(
+                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                        elevation: 10,
+                        child: ListTile(
                           leading: Checkbox(
                               value: todoList[index].complete,
                               onChanged: (bool value) {
                                 con.completeToDo(value, index);
                               }),
                           title: Text(todoList[index].title),
+                          subtitle: Text(
+                            todoList[index].note.length == 0
+                                ? 'Description'
+                                : todoList[index].note,
+                          ),
                           trailing: IconButton(
                             icon: Icon(Icons.mode_edit),
-                            onPressed: con.editToDo,
-                          )),
+                            onPressed: () => con.editToDo(index),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 )),
@@ -155,16 +167,26 @@ class _Controller {
     }
   }
 
-  void editToDo() async {
-    await Navigator.pushNamed(_state.context, EditToDoScreen.routName,
+  void editToDo(int index) async {
+    final change = await Navigator.pushNamed(
+        _state.context, EditToDoScreen.routName,
         arguments: {
           'user': _state.user,
           'userProfile': _state.userProfile,
-          'todoList': _state.todoList
+          'todoList': _state.todoList[index],
+          'index': index,
         });
+    delete(change);
+    print("Back from edit");
     _state.render(() {});
     // await _state.user.reload();
 
     //   Navigator.pop(_state.context);
+  }
+
+  void delete(int indeX) {
+    print("delete at position: ${indeX}");
+    _state.todoList.removeAt(indeX);
+    _state.render(() {});
   }
 }

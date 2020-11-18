@@ -120,4 +120,18 @@ class FireBaseController {
         .document('${todoList[index].userId}')
         .setData({'complete': value}, merge: true);
   }
+
+  static Future<void> updateToDo(ToDoList todoList) async {
+    await Firestore.instance
+        .collection(ToDoList.COLLECTION)
+        .document('${todoList.userId}')
+        .setData(todoList.serialize(), merge: true);
+  }
+
+  static Future<void> deleteToDo(ToDoList todoList) async {
+    await Firestore.instance
+        .collection(ToDoList.COLLECTION)
+        .document('${todoList.userId}')
+        .delete();
+  }
 }

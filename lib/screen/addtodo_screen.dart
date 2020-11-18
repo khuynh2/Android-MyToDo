@@ -84,7 +84,7 @@ class _AddToDoState extends State<AddToDoScreen> {
                         ),
                         autocorrect: true,
                         keyboardType: TextInputType.multiline,
-                        maxLines: 7,
+                        maxLines: 4,
                         //validator: con.validatorNote,
                         onSaved: con.onSavedNote,
                       ),

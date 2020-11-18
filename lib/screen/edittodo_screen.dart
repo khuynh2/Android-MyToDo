@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +24,8 @@ class _EditToDoState extends State<EditToDoScreen> {
   var formKey = GlobalKey<FormState>();
   FirebaseUser user;
   List<User> userProfile;
-  List<ToDoList> todoList;
+  ToDoList todoList;
+  int indeX;
 
   @override
   void initState() {
@@ -40,13 +43,14 @@ class _EditToDoState extends State<EditToDoScreen> {
     user ??= arg['user'];
     userProfile ??= arg['userProfile'];
     todoList ??= arg['todoList'];
+    indeX ??= arg['index'];
     return Scaffold(
         appBar: AppBar(
           title: Text('Edit to do'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.check),
-              //onPressed: con.save,
+              onPressed: con.save,
             )
           ],
         ),
@@ -61,7 +65,7 @@ class _EditToDoState extends State<EditToDoScreen> {
                     children: <Widget>[
                       TextFormField(
                         decoration: InputDecoration(
-                          hintText: 'Task Name',
+                          hintText: todoList.title,
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
                             borderSide: new BorderSide(),
@@ -76,7 +80,9 @@ class _EditToDoState extends State<EditToDoScreen> {
                       ),
                       TextFormField(
                         decoration: InputDecoration(
-                          hintText: 'Description',
+                          hintText: todoList.note.length == 0
+                              ? 'Description'
+                              : todoList.note,
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
                             borderSide: new BorderSide(),
@@ -84,7 +90,7 @@ class _EditToDoState extends State<EditToDoScreen> {
                         ),
                         autocorrect: true,
                         keyboardType: TextInputType.multiline,
-                        maxLines: 7,
+                        maxLines: 4,
                         //validator: con.validatorNote,
                         onSaved: con.onSavedNote,
                       ),
@@ -93,6 +99,18 @@ class _EditToDoState extends State<EditToDoScreen> {
                       ),
                       Text(
                         'Tags: ',
+                      ),
+                      Wrap(
+                        spacing: 10.0,
+                        children: <Widget>[
+                          if (todoList.tags != null)
+                            for (var i in todoList.tags)
+                              Container(
+                                padding: EdgeInsets.all(5.0),
+                                color: Colors.grey[800],
+                                child: Text('${i.toString().trim()}'),
+                              ),
+                        ],
                       ),
                       TextFormField(
                         style: TextStyle(fontSize: 14),
@@ -130,6 +148,24 @@ class _EditToDoState extends State<EditToDoScreen> {
                         //validator: con.validatorMemo,
                         //onSaved: con.onSavedLabel,
                       ),
+                      SizedBox(
+                        height: 25,
+                      ),
+                      FlatButton(
+                        onPressed: con.delete,
+                        child: Row(
+                          children: <Widget>[
+                            Text(
+                              'Delete this task',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            Icon(
+                              Icons.delete,
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -142,8 +178,6 @@ class _Controller {
   _EditToDoState _state;
   _Controller(this._state);
 
-  String title;
-  String note;
   List<dynamic> tags;
   String uploadProgressMessage;
 
@@ -152,22 +186,26 @@ class _Controller {
     _state.formKey.currentState.save();
 
     try {
-      var td = ToDoList(
-        title: title,
-        note: note,
-        email: _state.userProfile[0].email,
-        complete: false,
-        tags: tags,
-      );
-
-      td.userId = await FireBaseController.addToDo(td);
-      _state.todoList.insert(0, td);
+      await FireBaseController.updateToDo(_state.todoList);
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);
       MyDialog.info(
         context: _state.context,
         title: 'Error saving',
+        content: e.message ?? e.toString(),
+      );
+    }
+  }
+
+  Future<void> delete() async {
+    try {
+      await FireBaseController.deleteToDo(_state.todoList);
+      Navigator.pop(_state.context, _state.indeX);
+    } catch (e) {
+      MyDialog.info(
+        context: _state.context,
+        title: 'Delete To do task error',
         content: e.message ?? e.toString(),
       );
     }
@@ -184,16 +222,23 @@ class _Controller {
 
 //save
   String onSavedTitle(String value) {
-    this.title = value;
+    if (value != null) {
+      print("Testing **********");
+      print(value);
+      _state.todoList.title = value;
+    }
   }
 
   String onSavedNote(String value) {
-    this.note = value;
+    if (value != null) {
+      _state.todoList.note = value;
+    }
   }
 
   String onSavedTags(String value) {
     if (value.trim().length != 0) {
-      this.tags = value.split(',').map((e) => e.trim()).toList();
+      _state.todoList.tags
+          .addAll(value.split(',').map((e) => e.trim()).toList());
     }
   }
 }

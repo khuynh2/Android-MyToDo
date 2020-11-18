@@ -97,4 +97,19 @@ class FireBaseController {
         .add(todo.serialize());
     return ref.documentID;
   }
+
+  static Future<List<ToDoList>> getUserToDo(String email) async {
+    QuerySnapshot querySnapshot = await Firestore.instance
+        .collection(ToDoList.COLLECTION)
+        .where(ToDoList.EMAIL, isEqualTo: email)
+        .getDocuments();
+
+    var todolist = <ToDoList>[];
+    if (querySnapshot != null && querySnapshot.documents.length != 0) {
+      for (var doc in querySnapshot.documents) {
+        todolist.add(ToDoList.deserialize(doc.data, doc.documentID));
+      }
+    }
+    return todolist;
+  }
 }

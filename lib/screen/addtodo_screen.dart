@@ -101,12 +101,10 @@ class _AddToDoState extends State<AddToDoScreen> {
                             borderSide: new BorderSide(),
                           ),
                         ),
-
                         autocorrect: true,
                         keyboardType: TextInputType.multiline,
                         maxLines: 5,
-
-                        //  onSaved: con.onSavedLabel,
+                        onSaved: con.onSavedTags,
                       ),
                       SizedBox(
                         height: 5,
@@ -144,6 +142,7 @@ class _Controller {
 
   String title;
   String note;
+  List<dynamic> tags;
   String uploadProgressMessage;
 
   Future<void> save() async {
@@ -155,9 +154,11 @@ class _Controller {
         title: title,
         note: note,
         email: _state.userProfile[0].email,
+        complete: false,
       );
 
       td.userId = await FireBaseController.addToDo(td);
+      Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);
       MyDialog.info(
@@ -192,5 +193,11 @@ class _Controller {
 
   String onSavedNote(String value) {
     this.note = value;
+  }
+
+  String onSavedTags(String value) {
+    if (value.trim().length != 0) {
+      this.tags = value.split(',').map((e) => e.trim()).toList();
+    }
   }
 }

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/signup_screen.dart';
 import 'package:term_project/screen/todo_screen.dart';
@@ -132,9 +133,16 @@ class _Controller {
       List<User> userProfile =
           await FireBaseController.getUserProfile(user.email);
 
+      List<ToDoList> todoList =
+          await FireBaseController.getUserToDo(user.email);
+
       MyDialog.CircularProgressEnd(_state.context);
       Navigator.pushReplacementNamed(_state.context, ToDoScreen.routeName,
-          arguments: {'user': user, 'userProfile': userProfile});
+          arguments: {
+            'user': user,
+            'userProfile': userProfile,
+            'todoList': todoList
+          });
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);
       MyDialog.info(

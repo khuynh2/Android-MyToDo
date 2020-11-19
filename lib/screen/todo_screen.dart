@@ -161,6 +161,9 @@ class _Controller {
       print(
           'complete ${_state.todoList[index].title} = ${_state.todoList[index].complete}');
       _state.render(() {});
+      Future.delayed(Duration(seconds: 2), () {
+        delete(index);
+      });
     } catch (e) {
       MyDialog.info(
         context: _state.context,

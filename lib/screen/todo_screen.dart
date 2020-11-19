@@ -185,8 +185,10 @@ class _Controller {
   }
 
   void delete(int indeX) {
-    print("delete at position: ${indeX}");
-    _state.todoList.removeAt(indeX);
-    _state.render(() {});
+    if (indeX != null) {
+      print("delete at position: ${indeX}");
+      _state.todoList.removeAt(indeX);
+      _state.render(() {});
+    }
   }
 }

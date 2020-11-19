@@ -75,8 +75,11 @@ class _ToDoState extends State<ToDoScreen> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.indigo[800],
-            child: Icon(Icons.add),
+            backgroundColor: Colors.tealAccent,
+            child: Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
             onPressed: con.addMyToDo,
           ),
           body: todoList.length == 0

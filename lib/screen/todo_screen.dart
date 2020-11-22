@@ -90,48 +90,53 @@ class _ToDoState extends State<ToDoScreen> {
                 )
               : ListView.builder(
                   itemCount: todoList.length,
-                  itemBuilder: (BuildContext contet, int index) => Container(
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10)),
-                        elevation: 10,
-                        child: ListTile(
-                          leading: Checkbox(
-                              value: todoList[index].complete,
-                              onChanged: (bool value) {
-                                con.completeToDo(value, index);
-                              }),
-                          title: Text(todoList[index].title),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                todoList[index].dueDate == null
-                                    ? ''
-                                    : todoList[index]
-                                        .dueDate
-                                        .toString()
-                                        .split("00:")
-                                        .first,
+                  itemBuilder: (BuildContext contet, int index) {
+                    if (todoList[index].complete != true) {
+                      return Container(
+                        child: Container(
+                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 10,
+                            child: ListTile(
+                              leading: Checkbox(
+                                  value: todoList[index].complete,
+                                  onChanged: (bool value) {
+                                    con.completeToDo(value, index);
+                                  }),
+                              title: Text(todoList[index].title),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    todoList[index].dueDate == null
+                                        ? ''
+                                        : todoList[index]
+                                            .dueDate
+                                            .toString()
+                                            .split("00:")
+                                            .first,
+                                  ),
+                                  Text(
+                                    todoList[index].note.length == 0
+                                        ? ''
+                                        : todoList[index].note,
+                                  ),
+                                ],
                               ),
-                              Text(
-                                todoList[index].note.length == 0
-                                    ? ''
-                                    : todoList[index].note,
+                              trailing: IconButton(
+                                icon: Icon(Icons.mode_edit),
+                                onPressed: () => con.editToDo(index),
                               ),
-                            ],
-                          ),
-                          trailing: IconButton(
-                            icon: Icon(Icons.mode_edit),
-                            onPressed: () => con.editToDo(index),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                )),
+                      );
+                    } else {
+                      return const SizedBox();
+                    }
+                  })),
     );
   }
 }

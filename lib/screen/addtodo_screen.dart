@@ -23,6 +23,7 @@ class _AddToDoState extends State<AddToDoScreen> {
   FirebaseUser user;
   List<User> userProfile;
   List<ToDoList> todoList;
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -114,21 +115,27 @@ class _AddToDoState extends State<AddToDoScreen> {
                       Text(
                         'Due: ',
                       ),
-                      TextFormField(
-                        style: TextStyle(fontSize: 14),
-                        decoration: InputDecoration(
-                          hintText: 'mm/dd/yy',
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(),
+                      GestureDetector(
+                        onTap: () => con.selectDate(context),
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            style: TextStyle(fontSize: 14),
+                            decoration: InputDecoration(
+                              hintText:
+                                  "${selectedDate.toLocal()}".split(' ')[0],
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(),
+                              ),
+                            ),
+
+                            autocorrect: true,
+                            keyboardType: TextInputType.datetime,
+
+                            //validator: con.validatorMemo,
+                            //onSaved: con.onSavedLabel,
                           ),
                         ),
-
-                        autocorrect: true,
-                        keyboardType: TextInputType.datetime,
-
-                        //validator: con.validatorMemo,
-                        //onSaved: con.onSavedLabel,
                       ),
                     ],
                   ),
@@ -146,6 +153,7 @@ class _Controller {
   String note;
   List<dynamic> tags;
   String uploadProgressMessage;
+  DateTime duedate;
 
   Future<void> save() async {
     if (!_state.formKey.currentState.validate()) return;
@@ -153,15 +161,16 @@ class _Controller {
 
     try {
       var td = ToDoList(
-        title: title,
-        note: note,
-        email: _state.userProfile[0].email,
-        complete: false,
-        tags: tags,
-      );
+          title: title,
+          note: note,
+          email: _state.userProfile[0].email,
+          complete: false,
+          tags: tags,
+          dueDate: duedate);
 
       td.userId = await FireBaseController.addToDo(td);
       _state.todoList.insert(0, td);
+
       Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);
@@ -170,6 +179,20 @@ class _Controller {
         title: 'Error saving',
         content: e.message ?? e.toString(),
       );
+    }
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime pickDate = await showDatePicker(
+        context: context,
+        initialDate: _state.selectedDate,
+        firstDate: _state.selectedDate,
+        lastDate: DateTime(2022));
+    if (pickDate != null && pickDate != _state.selectedDate) {
+      _state.selectedDate = pickDate;
+      duedate = pickDate;
+      //print(duedate);
+      _state.render(() {});
     }
   }
 

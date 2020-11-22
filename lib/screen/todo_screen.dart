@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:term_project/controller/controller.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
@@ -103,10 +104,24 @@ class _ToDoState extends State<ToDoScreen> {
                                 con.completeToDo(value, index);
                               }),
                           title: Text(todoList[index].title),
-                          subtitle: Text(
-                            todoList[index].note.length == 0
-                                ? 'Description'
-                                : todoList[index].note,
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                todoList[index].dueDate == null
+                                    ? ''
+                                    : todoList[index]
+                                        .dueDate
+                                        .toString()
+                                        .split("00:")
+                                        .first,
+                              ),
+                              Text(
+                                todoList[index].note.length == 0
+                                    ? ''
+                                    : todoList[index].note,
+                              ),
+                            ],
                           ),
                           trailing: IconButton(
                             icon: Icon(Icons.mode_edit),
@@ -189,6 +204,15 @@ class _Controller {
 
     //   Navigator.pop(_state.context);
   }
+
+  // String getDueDate(int index) {
+  //   String due =
+  //       Controller.formatDate(_state.todoList[index].dueDate.toString());
+  //   if (due != null) {
+  //     return due;
+  //   }
+  //   return 'Due';
+  // }
 
   void delete(int indeX) {
     if (indeX != null) {

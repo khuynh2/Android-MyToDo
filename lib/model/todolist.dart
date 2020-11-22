@@ -43,9 +43,12 @@ class ToDoList {
       email: data[ToDoList.EMAIL],
       title: data[ToDoList.TITLE],
       note: data[ToDoList.NOTE],
-      dueDate: data[ToDoList.DUE_DATE],
       tags: data[ToDoList.TAGS],
       complete: data[ToDoList.COMPLETE],
+      dueDate: data[ToDoList.DUE_DATE] != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+              data[ToDoList.DUE_DATE].millisecondsSinceEpoch)
+          : null,
     );
   }
 }

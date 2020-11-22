@@ -26,6 +26,7 @@ class _EditToDoState extends State<EditToDoScreen> {
   List<User> userProfile;
   ToDoList todoList;
   int indeX;
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -132,21 +133,27 @@ class _EditToDoState extends State<EditToDoScreen> {
                       Text(
                         'Due: ',
                       ),
-                      TextFormField(
-                        style: TextStyle(fontSize: 14),
-                        decoration: InputDecoration(
-                          hintText: 'mm/dd/yy',
-                          border: new OutlineInputBorder(
-                            borderRadius: new BorderRadius.circular(25.0),
-                            borderSide: new BorderSide(),
+                      GestureDetector(
+                        onTap: () => con.selectDate(context),
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            style: TextStyle(fontSize: 14),
+                            decoration: InputDecoration(
+                              hintText:
+                                  "${selectedDate.toLocal()}".split(' ')[0],
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(),
+                              ),
+                            ),
+
+                            autocorrect: true,
+                            keyboardType: TextInputType.datetime,
+
+                            //validator: con.validatorMemo,
+                            //onSaved: con.onSavedLabel,
                           ),
                         ),
-
-                        autocorrect: true,
-                        keyboardType: TextInputType.datetime,
-
-                        //validator: con.validatorMemo,
-                        //onSaved: con.onSavedLabel,
                       ),
                       SizedBox(
                         height: 25,
@@ -180,6 +187,7 @@ class _Controller {
 
   List<dynamic> tags;
   String uploadProgressMessage;
+  DateTime duedate;
 
   Future<void> save() async {
     if (!_state.formKey.currentState.validate()) return;
@@ -195,6 +203,19 @@ class _Controller {
         title: 'Error saving',
         content: e.message ?? e.toString(),
       );
+    }
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime pickDate = await showDatePicker(
+        context: context,
+        initialDate: _state.selectedDate,
+        firstDate: _state.selectedDate,
+        lastDate: DateTime(2022));
+    if (pickDate != null && pickDate != _state.selectedDate) {
+      _state.selectedDate = pickDate;
+      duedate = pickDate;
+      _state.render(() {});
     }
   }
 
@@ -236,7 +257,7 @@ class _Controller {
   }
 
   String onSavedTags(String value) {
-    if (value.trim().length != 0) {
+    if (value.trim().length != 0 && value != null) {
       _state.todoList.tags
           .addAll(value.split(',').map((e) => e.trim()).toList());
     }

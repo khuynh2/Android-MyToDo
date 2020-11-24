@@ -1,15 +1,30 @@
 import 'package:flutter/material.dart';
 
 class MyFilter {
-  static void info({BuildContext context, String value, Set<dynamic> tagsSet}) {
+  static void info(
+      {BuildContext context, String value, List<dynamic> tagsList}) {
     showDialog(
-        barrierDismissible: false,
+        //barrierDismissible: false,
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text('Filter'),
-            content:
-                ListView.builder(itemCount: tagsSet.length, itemBuilder: null),
+            content: Container(
+              width: 350,
+              height: 250,
+              child: ListView.builder(
+                  //scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  itemCount: tagsList.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      title: Text(tagsList[index]),
+                      leading: Radio(
+                        value: tagsList[index],
+                      ),
+                    );
+                  }),
+            ),
           );
         });
   }

@@ -179,11 +179,11 @@ class _Controller {
       print(tagsList[i]);
     }
 
-    // MyFilter.info(
-    //   context: _state.context,
-    //   tagsSet: tagsSet,
-    //   value: value,
-    // );
+    MyFilter.info(
+      context: _state.context,
+      tagsList: tagsList,
+      value: value,
+    );
   }
 
   void settings() async {

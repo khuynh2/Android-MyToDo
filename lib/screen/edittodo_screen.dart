@@ -260,6 +260,8 @@ class _Controller {
     if (value.trim().length != 0 && value != null) {
       _state.todoList.tags
           .addAll(value.split(',').map((e) => e.trim()).toList());
+    } else {
+      return null;
     }
   }
 }

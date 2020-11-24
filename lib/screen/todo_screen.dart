@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +11,7 @@ import 'package:term_project/screen/addtodo_screen.dart';
 import 'package:term_project/screen/edittodo_screen.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
+import 'package:term_project/screen/view/myfilter.dart';
 
 import 'view/mydialog.dart';
 import 'view/myimageview.dart';
@@ -50,6 +53,12 @@ class _ToDoState extends State<ToDoScreen> {
       child: Scaffold(
           appBar: AppBar(
             title: Text('MyToDo'),
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(Icons.sort),
+                onPressed: con.filter,
+              )
+            ],
           ),
           drawer: Drawer(
             child: ListView(
@@ -145,6 +154,7 @@ class _Controller {
   _ToDoState _state;
   _Controller(this._state);
   bool complete;
+  List<dynamic> tagsList;
 
   Future<void> signOut() async {
     try {
@@ -153,6 +163,27 @@ class _Controller {
       print('signOut exception: ${e.message}');
     }
     Navigator.pushReplacementNamed(_state.context, SignInScreen.routeName);
+  }
+
+  void filter() {
+    Set<dynamic> tagsSet = HashSet<dynamic>();
+    String value;
+    for (var i in _state.todoList) {
+      if (i.tags != null) {
+        tagsSet.addAll(i.tags);
+      }
+    }
+    tagsList = tagsSet.toList();
+
+    for (int i = 0; i < tagsList.length; i++) {
+      print(tagsList[i]);
+    }
+
+    // MyFilter.info(
+    //   context: _state.context,
+    //   tagsSet: tagsSet,
+    //   value: value,
+    // );
   }
 
   void settings() async {

@@ -1,30 +1,40 @@
 import 'package:flutter/material.dart';
 
 class MyFilter {
-  static void info(
-      {BuildContext context, String value, List<dynamic> tagsList}) {
+  static void info({BuildContext context, var value, List<dynamic> tagsList}) {
     showDialog(
         //barrierDismissible: false,
         context: context,
         builder: (BuildContext context) {
+          String _tags = '';
           return AlertDialog(
             title: Text('Filter'),
-            content: Container(
-              width: 350,
-              height: 250,
-              child: ListView.builder(
-                  //scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  itemCount: tagsList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: Text(tagsList[index]),
-                      leading: Radio(
-                        value: tagsList[index],
-                      ),
-                    );
-                  }),
-            ),
+            content: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+              return Container(
+                  width: 350,
+                  height: 250,
+                  child: ListView.builder(
+                      //scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: tagsList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(tagsList[index]),
+                          leading: Radio<String>(
+                            //activeColor: Color(0xFF6200EE),
+                            value: tagsList[index],
+                            groupValue: _tags,
+                            onChanged: (String value) {
+                              setState(() {
+                                _tags = value;
+                                //print(_tags);
+                              });
+                            },
+                          ),
+                        );
+                      }));
+            }),
           );
         });
   }

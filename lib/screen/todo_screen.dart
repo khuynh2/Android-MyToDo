@@ -175,9 +175,9 @@ class _Controller {
     }
     tagsList = tagsSet.toList();
 
-    for (int i = 0; i < tagsList.length; i++) {
-      print(tagsList[i]);
-    }
+    // for (int i = 0; i < tagsList.length; i++) {
+    //   print(tagsList[i]);
+    // }
 
     MyFilter.info(
       context: _state.context,

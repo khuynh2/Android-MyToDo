@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:day_selector/day_selector.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,6 +24,8 @@ class _AddDailyState extends State<AddDailyScreen> {
   var formKey2 = GlobalKey<FormState>();
   FirebaseUser user;
   List<User> userProfile;
+  List<bool> weekdays = List.filled(7, false);
+  final days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
   @override
   void initState() {
@@ -51,87 +55,76 @@ class _AddDailyState extends State<AddDailyScreen> {
         body: Container(
           alignment: Alignment.center,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Form(
-                key: formKey2,
-                child: SingleChildScrollView(
-                  child: Container(
-                    width: 350,
-                    child: Column(
-                      children: <Widget>[
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Task Name',
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(),
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Form(
+                  key: formKey2,
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: 350,
+                      child: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            decoration: InputDecoration(
+                              hintText: 'Task Name',
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(),
+                              ),
                             ),
+                            autocorrect: true,
+                            validator: con.validatorTitle,
+                            onSaved: con.onSavedTitle,
                           ),
-                          autocorrect: true,
-                          validator: con.validatorTitle,
-                          onSaved: con.onSavedTitle,
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'Description',
-                            border: new OutlineInputBorder(
-                              borderRadius: new BorderRadius.circular(25.0),
-                              borderSide: new BorderSide(),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              hintText: 'Description',
+                              border: new OutlineInputBorder(
+                                borderRadius: new BorderRadius.circular(25.0),
+                                borderSide: new BorderSide(),
+                              ),
                             ),
+                            autocorrect: true,
+                            keyboardType: TextInputType.multiline,
+                            maxLines: 4,
+                            onSaved: con.onSavedNote,
                           ),
-                          autocorrect: true,
-                          keyboardType: TextInputType.multiline,
-                          maxLines: 4,
-                          onSaved: con.onSavedNote,
-                        ),
-                        SizedBox(
-                          height: 25,
-                        ),
-                        Text(
-                          'Repeat: ',
-                        ),
-                      ],
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Text(
+                            'Repeat: ',
+                          ),
+                          SizedBox(
+                            height: 25,
+                          ),
+                          Container(
+                            height: 200.0,
+                            width: 450.0,
+                            child: ListView.builder(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                itemCount: days.length,
+                                itemBuilder: (BuildContext contet, int index) =>
+                                    Column(
+                                      children: <Widget>[
+                                        Text(days[index]),
+                                        Checkbox(
+                                          value: weekdays[index],
+                                        ),
+                                      ],
+                                    )),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DaySelector(
-                  onChange: (value) {
-                    print('value is $value');
-                    if (DaySelector.monday & value == DaySelector.monday) {
-                      print('monday selected');
-                    }
-                    if (DaySelector.tuesday & value == DaySelector.tuesday) {
-                      print('tuesday selected');
-                    }
-                    if (DaySelector.wednesday & value ==
-                        DaySelector.wednesday) {
-                      print('wednesday selected');
-                    }
-                    if (DaySelector.thursday & value == DaySelector.thursday) {
-                      print('thursday selected');
-                    }
-                    if (DaySelector.friday & value == DaySelector.friday) {
-                      print('friday selected');
-                    }
-                    if (DaySelector.saturday & value == DaySelector.saturday) {
-                      print('saturday selected');
-                    }
-                    if (DaySelector.sunday & value == DaySelector.sunday) {
-                      print('sunday selected');
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
+              ]),
         ));
   }
 }
@@ -154,6 +147,7 @@ class _Controller {
         note: note,
         email: _state.userProfile[0].email,
         streak: 0,
+        weekDay: _state.weekdays,
       );
 
       d.userId = await FireBaseController.addDaily(d);

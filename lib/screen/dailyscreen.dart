@@ -3,8 +3,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/userprofile.dart';
+import 'package:term_project/screen/adddailyscreen.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
+import 'package:term_project/screen/todo_screen.dart';
 
 import 'view/myimageview.dart';
 
@@ -38,47 +40,63 @@ class _DailyState extends State<DailyScreen> {
     Map arg = ModalRoute.of(context).settings.arguments;
     user ??= arg['user'];
     userProfile ??= arg['userProfile'];
-    return WillPopScope(
-        onWillPop: () => Future.value(false),
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('MyDaily'),
-            actions: <Widget>[],
-          ),
-          drawer: Drawer(
-            child: ListView(
-              children: <Widget>[
-                UserAccountsDrawerHeader(
-                  currentAccountPicture: MyImageView.netowrk(
-                      imageUrl: userProfile[0].userImageURL, context: context),
-                  accountName: Text('${userProfile[0].userName}'),
-                  accountEmail: Text(user.email),
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.settings,
-                  ),
-                  title: Text('Settings'),
-                  onTap: con.settings,
-                ),
-                ListTile(
-                  leading: Icon(Icons.exit_to_app),
-                  title: Text('Sign out'),
-                  onTap: con.signOut,
-                ),
-              ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('MyDaily'),
+        actions: <Widget>[],
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FlatButton(
+              child: Text("To Do"),
+              highlightColor: Colors.red,
+              onPressed: con.todo,
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.tealAccent,
-            child: Icon(
-              Icons.add,
-              color: Colors.white,
+            SizedBox(width: 20),
+            FlatButton(
+              child: Text("Daily"),
+              highlightColor: Colors.red,
+              //onPressed: con.daily
+            )
+          ],
+        ),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              currentAccountPicture: MyImageView.netowrk(
+                  imageUrl: userProfile[0].userImageURL, context: context),
+              accountName: Text('${userProfile[0].userName}'),
+              accountEmail: Text(user.email),
             ),
-            //onPressed: con.addMyToDo,
-          ),
-          body: Text('tESTING'),
-        ));
+            ListTile(
+              leading: Icon(
+                Icons.settings,
+              ),
+              title: Text('Settings'),
+              onTap: con.settings,
+            ),
+            ListTile(
+              leading: Icon(Icons.exit_to_app),
+              title: Text('Sign out'),
+              onTap: con.signOut,
+            ),
+          ],
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.tealAccent,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        onPressed: con.addMyDaily,
+      ),
+      body: Text('tESTING'),
+    );
   }
 }
 
@@ -99,8 +117,21 @@ class _Controller {
     await Navigator.pushNamed(_state.context, SettingsScreen.routeName,
         arguments: {'user': _state.user, 'userProfile': _state.userProfile});
     _state.render(() {});
-    // await _state.user.reload();
+  }
 
-    //   Navigator.pop(_state.context);
+  void todo() async {
+    // await Navigator.pushNamed(_state.context, ToDoScreen.routeName,
+    //     arguments: {'user': _state.user, 'userProfile': _state.userProfile});
+    // _state.render(() {});
+    Navigator.pop(_state.context);
+  }
+
+  void addMyDaily() async {
+    await Navigator.pushNamed(_state.context, AddDailyScreen.routName,
+        arguments: {
+          'user': _state.user,
+          'userProfile': _state.userProfile,
+        });
+    _state.render(() {});
   }
 }

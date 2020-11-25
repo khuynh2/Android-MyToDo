@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:term_project/screen/adddailyscreen.dart';
 import 'package:term_project/screen/addtodo_screen.dart';
 import 'package:term_project/screen/dailyscreen.dart';
 import 'package:term_project/screen/edittodo_screen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
         AddToDoScreen.routName: (context) => AddToDoScreen(),
         EditToDoScreen.routName: (context) => EditToDoScreen(),
         DailyScreen.routeName: (context) => DailyScreen(),
+        AddDailyScreen.routName: (context) => AddDailyScreen(),
       },
     );
     return materialApp;

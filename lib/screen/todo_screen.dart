@@ -69,8 +69,7 @@ class _ToDoState extends State<ToDoScreen> {
                 FlatButton(
                   child: Text("To Do"),
                   highlightColor: Colors.red,
-                  onPressed: () =>
-                      Navigator.pushNamed(context, ToDoScreen.routeName),
+                  //onPressed: con.todo,
                 ),
                 SizedBox(width: 20),
                 FlatButton(

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:term_project/controller/controller.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/model/dailylist.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/addtodo_screen.dart';
@@ -19,6 +20,7 @@ import 'view/myimageview.dart';
 
 class ToDoScreen extends StatefulWidget {
   static const routeName = '/signInScreen/todoScreen';
+
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
@@ -111,7 +113,7 @@ class _ToDoState extends State<ToDoScreen> {
             ),
             onPressed: con.addMyToDo,
           ),
-          body: todoList.length == 0
+          body: todoList == null || todoList.length == 0
               ? Text(
                   'My To Do list',
                   style: TextStyle(fontSize: 30.0),
@@ -214,9 +216,29 @@ class _Controller {
   }
 
   void daily() async {
-    await Navigator.pushNamed(_state.context, DailyScreen.routeName,
-        arguments: {'user': _state.user, 'userProfile': _state.userProfile});
-    _state.render(() {});
+    try {
+      List<DailyList> dailyList =
+          await FireBaseController.getUserDaily(_state.user.email);
+      MyDialog.CircularProgressEnd(_state.context);
+
+      await Navigator.pushNamed(_state.context, DailyScreen.routeName,
+          arguments: {
+            'user': _state.user,
+            'userProfile': _state.userProfile,
+            'todoList': _state.todoList,
+            'dailyList': dailyList
+          });
+      _state.render(() {});
+    } catch (e) {
+      MyDialog.CircularProgressEnd(_state.context);
+      MyDialog.info(
+        context: _state.context,
+        title: 'Firebase/Firestore error',
+        content: 'Cannot get user DailyList. Try again later! \n ${e.message}',
+      );
+    }
+
+    // _state.render(() {});
     // await _state.user.reload();
 
     //   Navigator.pop(_state.context);

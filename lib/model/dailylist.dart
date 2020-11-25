@@ -38,7 +38,7 @@ class DailyList {
       email: data[DailyList.EMAIL],
       title: data[DailyList.TITLE],
       note: data[DailyList.NOTE],
-      weekDay: data[DailyList.WEEKDAY],
+      // weekDay: data[DailyList.WEEKDAY],
       streak: data[DailyList.STREAK],
     );
   }

@@ -24,6 +24,7 @@ class _AddDailyState extends State<AddDailyScreen> {
   var formKey2 = GlobalKey<FormState>();
   FirebaseUser user;
   List<User> userProfile;
+  List<DailyList> dailyList;
   List<bool> weekdays = List.filled(7, false);
   final days = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
@@ -42,6 +43,8 @@ class _AddDailyState extends State<AddDailyScreen> {
     Map arg = ModalRoute.of(context).settings.arguments;
     user ??= arg['user'];
     userProfile ??= arg['userProfile'];
+    dailyList ??= arg['dailyList'];
+
     return Scaffold(
         appBar: AppBar(
           title: Text('Add new to do'),
@@ -52,15 +55,16 @@ class _AddDailyState extends State<AddDailyScreen> {
             )
           ],
         ),
-        body: Container(
-          alignment: Alignment.center,
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Form(
-                  key: formKey2,
-                  child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(0, 55, 0, 0),
+          child: Container(
+            alignment: Alignment.center,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Form(
+                    key: formKey2,
                     child: Container(
                       width: 350,
                       child: Column(
@@ -103,7 +107,7 @@ class _AddDailyState extends State<AddDailyScreen> {
                             height: 25,
                           ),
                           Container(
-                            height: 200.0,
+                            height: 150.0,
                             width: 450.0,
                             child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
@@ -115,6 +119,11 @@ class _AddDailyState extends State<AddDailyScreen> {
                                         Text(days[index]),
                                         Checkbox(
                                           value: weekdays[index],
+                                          onChanged: (bool value) {
+                                            setState(() {
+                                              weekdays[index] = value;
+                                            });
+                                          },
                                         ),
                                       ],
                                     )),
@@ -123,8 +132,8 @@ class _AddDailyState extends State<AddDailyScreen> {
                       ),
                     ),
                   ),
-                ),
-              ]),
+                ]),
+          ),
         ));
   }
 }
@@ -151,6 +160,9 @@ class _Controller {
       );
 
       d.userId = await FireBaseController.addDaily(d);
+      _state.dailyList.insert(0, d);
+
+      Navigator.pop(_state.context);
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);
       MyDialog.info(

@@ -144,4 +144,19 @@ class FireBaseController {
         .add(daily.serialize());
     return ref.documentID;
   }
+
+  static Future<List<DailyList>> getUserDaily(String email) async {
+    QuerySnapshot querySnapshot = await Firestore.instance
+        .collection(DailyList.COLLECTION)
+        .where(DailyList.EMAIL, isEqualTo: email)
+        .getDocuments();
+
+    var dailylist = <DailyList>[];
+    if (querySnapshot != null && querySnapshot.documents.length != 0) {
+      for (var doc in querySnapshot.documents) {
+        dailylist.add(DailyList.deserialize(doc.data, doc.documentID));
+      }
+    }
+    return dailylist;
+  }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyFilter {
-  static void info({BuildContext context, var value, List<dynamic> tagsList}) {
+  static Future<String> info({BuildContext context, List<dynamic> tagsList}) {
+    String tag;
     showDialog(
         //barrierDismissible: false,
         context: context,
@@ -9,8 +10,10 @@ class MyFilter {
           String _tags = '';
           return AlertDialog(
             title: Text('Filter'),
-            content: StatefulBuilder(
-                builder: (BuildContext context, StateSetter setState) {
+            content: StatefulBuilder(builder: (
+              BuildContext context,
+              StateSetter setState,
+            ) {
               return Container(
                   width: 350,
                   height: 250,
@@ -28,13 +31,21 @@ class MyFilter {
                             onChanged: (String value) {
                               setState(() {
                                 _tags = value;
-                                //print(_tags);
+                                tag = value;
                               });
                             },
                           ),
                         );
                       }));
             }),
+            actions: <Widget>[
+              FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop(tag);
+                    print("pop " + tag);
+                  }),
+            ],
           );
         });
   }

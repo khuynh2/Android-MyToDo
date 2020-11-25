@@ -8,6 +8,7 @@ import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/addtodo_screen.dart';
+import 'package:term_project/screen/dailyscreen.dart';
 import 'package:term_project/screen/edittodo_screen.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
@@ -59,6 +60,25 @@ class _ToDoState extends State<ToDoScreen> {
                 onPressed: con.filter,
               )
             ],
+          ),
+          bottomNavigationBar: BottomAppBar(
+            // color: Colors.grey[800],
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                FlatButton(
+                  child: Text("To Do"),
+                  highlightColor: Colors.red,
+                  onPressed: () =>
+                      Navigator.pushNamed(context, ToDoScreen.routeName),
+                ),
+                SizedBox(width: 20),
+                FlatButton(
+                    child: Text("Daily"),
+                    highlightColor: Colors.red,
+                    onPressed: con.daily)
+              ],
+            ),
           ),
           drawer: Drawer(
             child: ListView(
@@ -165,9 +185,9 @@ class _Controller {
     Navigator.pushReplacementNamed(_state.context, SignInScreen.routeName);
   }
 
-  void filter() {
+  Future<void> filter() async {
     Set<dynamic> tagsSet = HashSet<dynamic>();
-    String value;
+
     for (var i in _state.todoList) {
       if (i.tags != null) {
         tagsSet.addAll(i.tags);
@@ -179,15 +199,23 @@ class _Controller {
     //   print(tagsList[i]);
     // }
 
-    MyFilter.info(
+    await MyFilter.info(
       context: _state.context,
       tagsList: tagsList,
-      value: value,
     );
   }
 
   void settings() async {
     await Navigator.pushNamed(_state.context, SettingsScreen.routeName,
+        arguments: {'user': _state.user, 'userProfile': _state.userProfile});
+    _state.render(() {});
+    // await _state.user.reload();
+
+    //   Navigator.pop(_state.context);
+  }
+
+  void daily() async {
+    await Navigator.pushNamed(_state.context, DailyScreen.routeName,
         arguments: {'user': _state.user, 'userProfile': _state.userProfile});
     _state.render(() {});
     // await _state.user.reload();

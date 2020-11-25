@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:term_project/model/dailylist.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
 
@@ -133,5 +134,14 @@ class FireBaseController {
         .collection(ToDoList.COLLECTION)
         .document('${todoList.userId}')
         .delete();
+  }
+
+// DAILY
+
+  static Future<String> addDaily(DailyList daily) async {
+    DocumentReference ref = await Firestore.instance
+        .collection(DailyList.COLLECTION)
+        .add(daily.serialize());
+    return ref.documentID;
   }
 }

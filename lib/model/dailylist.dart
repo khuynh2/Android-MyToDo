@@ -1,54 +1,45 @@
-class ToDoList {
+class DailyList {
   static const COLLECTION = 'dailyList';
   static const EMAIL = 'email';
   static const TITLE = 'title';
   static const NOTE = 'NOTE';
-  static const DUE_DATE = 'dueDate';
-  static const TAGS = 'tags';
-  static const COMPLETE = 'complete';
+  static const WEEKDAY = 'weekDay';
+  static const STREAK = 'streak';
 
   String userId;
   String email;
   String title;
   String note;
-  DateTime dueDate;
-  List<dynamic> tags;
-  bool complete;
+  List<bool> weekDay;
+  int streak;
 
-  ToDoList({
+  DailyList({
     this.userId,
     this.email,
     this.title,
     this.note,
-    this.dueDate,
-    this.tags,
-    this.complete,
+    this.weekDay,
+    this.streak,
   });
 
-  //map todolist dart to fb
   Map<String, dynamic> serialize() {
     return <String, dynamic>{
       EMAIL: email,
       TITLE: title,
       NOTE: note,
-      DUE_DATE: dueDate,
-      TAGS: tags,
-      COMPLETE: complete,
+      WEEKDAY: weekDay,
+      STREAK: streak,
     };
   }
 
-  static ToDoList deserialize(Map<String, dynamic> data, String docId) {
-    return ToDoList(
+  static DailyList deserialize(Map<String, dynamic> data, String docId) {
+    return DailyList(
       userId: docId,
-      email: data[ToDoList.EMAIL],
-      title: data[ToDoList.TITLE],
-      note: data[ToDoList.NOTE],
-      tags: data[ToDoList.TAGS],
-      complete: data[ToDoList.COMPLETE],
-      dueDate: data[ToDoList.DUE_DATE] != null
-          ? DateTime.fromMillisecondsSinceEpoch(
-              data[ToDoList.DUE_DATE].millisecondsSinceEpoch)
-          : null,
+      email: data[DailyList.EMAIL],
+      title: data[DailyList.TITLE],
+      note: data[DailyList.NOTE],
+      weekDay: data[DailyList.WEEKDAY],
+      streak: data[DailyList.STREAK],
     );
   }
 }

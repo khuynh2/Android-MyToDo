@@ -1,6 +1,11 @@
 import 'package:day_selector/day_selector.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/model/dailylist.dart';
+import 'package:term_project/model/userprofile.dart';
+import 'package:term_project/screen/view/mydialog.dart';
 import 'package:weekday_selector/weekday_selector.dart';
 
 class AddDailyScreen extends StatefulWidget {
@@ -15,6 +20,8 @@ class AddDailyScreen extends StatefulWidget {
 class _AddDailyState extends State<AddDailyScreen> {
   _Controller con;
   var formKey2 = GlobalKey<FormState>();
+  FirebaseUser user;
+  List<User> userProfile;
 
   @override
   void initState() {
@@ -28,6 +35,9 @@ class _AddDailyState extends State<AddDailyScreen> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
+    Map arg = ModalRoute.of(context).settings.arguments;
+    user ??= arg['user'];
+    userProfile ??= arg['userProfile'];
     return Scaffold(
         appBar: AppBar(
           title: Text('Add new to do'),
@@ -133,10 +143,27 @@ class _Controller {
   String title;
   String note;
 
-  void save() {
-    // if (!_state.formKey.currentState.validate()) return;
-    // _state.formKey.currentState.save();
+  Future<void> save() async {
+    if (!_state.formKey2.currentState.validate()) return;
+    _state.formKey2.currentState.save();
     print("Pressed save");
+
+    try {
+      var d = DailyList(
+        title: title,
+        note: note,
+        email: _state.userProfile[0].email,
+        streak: 0,
+      );
+
+      d.userId = await FireBaseController.addDaily(d);
+    } catch (e) {
+      MyDialog.CircularProgressEnd(_state.context);
+      MyDialog.info(
+          context: _state.context,
+          title: 'Error saving',
+          content: e.message ?? e.toString());
+    }
   }
 
   //validator

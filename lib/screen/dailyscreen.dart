@@ -116,6 +116,8 @@ class _DailyState extends State<DailyScreen> {
                     return Container(
                       padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                       child: Card(
+                          color: con
+                              .colors[con.colorChange(dailyList[index].streak)],
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10)),
                           elevation: 10,
@@ -125,6 +127,7 @@ class _DailyState extends State<DailyScreen> {
                               onPressed: () => con.fail(index),
                             ),
                             title: Center(child: Text(dailyList[index].title)),
+                            subtitle: Text('${dailyList[index].streak}'),
                             trailing: IconButton(
                               icon: Icon(Icons.add),
                               onPressed: () => con.success(index),
@@ -140,6 +143,12 @@ class _DailyState extends State<DailyScreen> {
 class _Controller {
   _DailyState _state;
   _Controller(this._state);
+
+  List<Color> colors = <Color>[
+    Colors.red[300],
+    Colors.blue[300],
+    Colors.grey[800],
+  ];
 
   Future<void> signOut() async {
     try {
@@ -181,10 +190,23 @@ class _Controller {
     //Navigator.pop(_state.context);
   }
 
+  int colorChange(int streak) {
+    if (streak >= 5) {
+      return 1;
+    }
+    if (streak <= -5) {
+      return 0;
+    } else {
+      return 2;
+    }
+  }
+
   Future<void> success(int index) async {
     try {
       _state.dailyList[index].streak++;
+
       await FireBaseController.increaseStreak(_state.dailyList, index);
+      _state.render(() {});
     } catch (e) {
       print(e);
     }
@@ -193,7 +215,9 @@ class _Controller {
   Future<void> fail(int index) async {
     try {
       _state.dailyList[index].streak--;
+
       await FireBaseController.decreaseStreak(_state.dailyList, index);
+      _state.render(() {});
     } catch (e) {
       print(e);
     }

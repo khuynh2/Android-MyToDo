@@ -127,7 +127,11 @@ class _DailyState extends State<DailyScreen> {
                               onPressed: () => con.fail(index),
                             ),
                             title: Center(child: Text(dailyList[index].title)),
-                            subtitle: Text('${dailyList[index].streak}'),
+                            subtitle: Text(
+                              dailyList[index].note.length == 0
+                                  ? ''
+                                  : dailyList[index].note,
+                            ),
                             trailing: IconButton(
                               icon: Icon(Icons.add),
                               onPressed: () => con.success(index),

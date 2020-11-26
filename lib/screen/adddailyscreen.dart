@@ -47,7 +47,7 @@ class _AddDailyState extends State<AddDailyScreen> {
 
     return Scaffold(
         appBar: AppBar(
-          title: Text('Add new to do'),
+          title: Text('Add new daily'),
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.check),

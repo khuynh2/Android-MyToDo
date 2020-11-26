@@ -112,7 +112,7 @@ class _DailyState extends State<DailyScreen> {
             : ListView.builder(
                 itemCount: dailyList.length,
                 itemBuilder: (BuildContext contet, int index) {
-                  if (true) {
+                  if (con.dateCheck(index)) {
                     return Container(
                       padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
                       child: Card(
@@ -202,6 +202,18 @@ class _Controller {
       return 0;
     } else {
       return 2;
+    }
+  }
+
+  bool dateCheck(int index) {
+    var now = new DateTime.now().weekday;
+    // print("Day:");
+    //print(_state.dailyList[index].weekDay[now - 1]);
+    if (_state.dailyList[index].weekDay[now - 1]) {
+      print("Avaliable now:" + now.toString());
+      return true;
+    } else {
+      return false;
     }
   }
 

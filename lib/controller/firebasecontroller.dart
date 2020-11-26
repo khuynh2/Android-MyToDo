@@ -159,4 +159,20 @@ class FireBaseController {
     }
     return dailylist;
   }
+
+  static Future<void> increaseStreak(
+      List<DailyList> dailyList, int index) async {
+    await Firestore.instance
+        .collection('dailyList')
+        .document('${dailyList[index].userId}')
+        .updateData({"streak": FieldValue.increment(1)});
+  }
+
+  static Future<void> decreaseStreak(
+      List<DailyList> dailyList, int index) async {
+    await Firestore.instance
+        .collection('dailyList')
+        .document('${dailyList[index].userId}')
+        .updateData({"streak": FieldValue.increment(-1)});
+  }
 }

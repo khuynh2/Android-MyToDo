@@ -122,9 +122,13 @@ class _DailyState extends State<DailyScreen> {
                           child: ListTile(
                             leading: IconButton(
                               icon: Icon(Icons.remove),
+                              onPressed: () => con.fail(index),
                             ),
                             title: Center(child: Text(dailyList[index].title)),
-                            trailing: IconButton(icon: Icon(Icons.add)),
+                            trailing: IconButton(
+                              icon: Icon(Icons.add),
+                              onPressed: () => con.success(index),
+                            ),
                           )),
                     );
                   }
@@ -175,6 +179,24 @@ class _Controller {
     // _state.render(() {});
     // Navigator.of(_state.context, rootNavigator: true).pop(_state.context);
     //Navigator.pop(_state.context);
+  }
+
+  Future<void> success(int index) async {
+    try {
+      _state.dailyList[index].streak++;
+      await FireBaseController.increaseStreak(_state.dailyList, index);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> fail(int index) async {
+    try {
+      _state.dailyList[index].streak--;
+      await FireBaseController.decreaseStreak(_state.dailyList, index);
+    } catch (e) {
+      print(e);
+    }
   }
 
   void addMyDaily() async {

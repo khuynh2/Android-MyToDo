@@ -25,7 +25,7 @@ class _MessageHandlerState extends State<MessageHandler> {
   @override
   void initState() {
     _fcm.subscribeToTopic('all');
-    _fcm.onTokenRefresh.listen(con.sendTokenToServer);
+    _fcm.onTokenRefresh.listen(sendTokenToServer);
     _fcm.getToken();
 
     super.initState();

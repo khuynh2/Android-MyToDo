@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
+import 'package:term_project/screen/adminscreen.dart';
 import 'package:term_project/screen/signup_screen.dart';
+import 'package:term_project/screen/testing.dart';
 import 'package:term_project/screen/todo_screen.dart';
 import 'package:term_project/screen/view/mydialog.dart';
 
@@ -135,16 +137,27 @@ class _Controller {
       List<User> userProfile =
           await FireBaseController.getUserProfile(user.email);
 
-      List<ToDoList> todoList =
-          await FireBaseController.getUserToDo(user.email);
+      if (userProfile[0].userRole == 'user') {
+        List<ToDoList> todoList =
+            await FireBaseController.getUserToDo(user.email);
 
-      MyDialog.CircularProgressEnd(_state.context);
-      Navigator.pushReplacementNamed(_state.context, ToDoScreen.routeName,
-          arguments: {
-            'user': user,
-            'userProfile': userProfile,
-            'todoList': todoList
-          });
+        MyDialog.CircularProgressEnd(_state.context);
+        Navigator.pushReplacementNamed(_state.context, ToDoScreen.routeName,
+            arguments: {
+              'user': user,
+              'userProfile': userProfile,
+              'todoList': todoList
+            });
+      } else if (userProfile[0].userRole == 'admin') {
+        List<User> userProfiles = await FireBaseController.getUserProfiles();
+
+        await Navigator.pushNamed(_state.context, AdminScreen.routeName,
+            arguments: {
+              'user': user,
+              'userProfile': userProfile,
+              'userProfiles': userProfiles
+            });
+      }
     } catch (e) {
       MyDialog.CircularProgressEnd(_state.context);
       MyDialog.info(

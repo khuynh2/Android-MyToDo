@@ -175,4 +175,19 @@ class FireBaseController {
         .document('${dailyList[index].userId}')
         .updateData({"streak": FieldValue.increment(-1)});
   }
+
+  ///
+
+  static Future<List<User>> getUserProfiles() async {
+    QuerySnapshot querySnapshot =
+        await Firestore.instance.collection(User.COLLECTION).getDocuments();
+
+    var profiles = <User>[];
+    if (querySnapshot != null && querySnapshot.documents.length != 0) {
+      for (var doc in querySnapshot.documents) {
+        profiles.add(User.deserializeUser(doc.data, doc.documentID));
+      }
+    }
+    return profiles;
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:term_project/screen/adddailyscreen.dart';
 import 'package:term_project/screen/addtodo_screen.dart';
+import 'package:term_project/screen/adminscreen.dart';
 import 'package:term_project/screen/dailyscreen.dart';
 import 'package:term_project/screen/edittodo_screen.dart';
 import 'package:term_project/screen/messagehandler.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         DailyScreen.routeName: (context) => DailyScreen(),
         AddDailyScreen.routName: (context) => AddDailyScreen(),
         Test.routeName: (context) => Test(),
+        AdminScreen.routeName: (context) => AdminScreen(),
       },
     );
     return materialApp;

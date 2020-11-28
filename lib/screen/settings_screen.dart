@@ -9,6 +9,7 @@ import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/todo_screen.dart';
 
+import 'messagehandler.dart';
 import 'view/mydialog.dart';
 import 'view/myimageview.dart';
 
@@ -76,7 +77,7 @@ class _SettingsState extends State<SettingsScreen> {
                         style: TextStyle(fontSize: 20.0, color: Colors.white),
                       )),
                   Text('Username: ${userProfile[0].userName}'),
-                  Text('Theme: ')
+                  Text('Theme: '),
                 ],
               ),
             )));

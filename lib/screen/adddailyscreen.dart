@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:day_selector/day_selector.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +7,6 @@ import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/dailylist.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/view/mydialog.dart';
-import 'package:weekday_selector/weekday_selector.dart';
 
 class AddDailyScreen extends StatefulWidget {
   static const routName = '/dailyScreen/addDailycreen';

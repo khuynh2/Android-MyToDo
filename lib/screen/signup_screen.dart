@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/controller/messagingcontroller.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'view/mydialog.dart';
 
@@ -125,9 +126,6 @@ class _Controller {
     if (!_state.formKey.currentState.validate()) return;
     _state.formKey.currentState.save();
 
-    //bool check = await FireBaseController.signUpCheck(email, password);
-    //
-
     if (true) {
       try {
         await FireBaseController.signUp(email, password);
@@ -141,6 +139,7 @@ class _Controller {
 
         u.userId = await FireBaseController.addUserProfile(u);
         // MyDialog.CircularProgressEnd(_state.context);
+        MessagingController.fcmSubscribe(username);
         Navigator.pop(_state.context);
 
         MyDialog.info(

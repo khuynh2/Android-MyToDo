@@ -31,6 +31,7 @@ dependencies:
   cached_network_image: ^2.3.3
   firebase_messaging: ^5.0.2
   mvc_pattern: ^6.6.3
+  firebase_analytics: ^6.2.0
  
 
 

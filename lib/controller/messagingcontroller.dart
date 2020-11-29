@@ -1,10 +1,13 @@
 import 'dart:convert';
+import 'dart:ffi';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 
 class MessagingController {
   static final Client client = Client();
+  static FirebaseMessaging fcm = FirebaseMessaging();
 
   static const String serverKey =
       'AAAAuzgIDlA:APA91bEbIFEeTT_mGkTGT1Wme8iFoLZtkuRL7PUgqxj4r1BgKxUZQTe33ceSq8VQH_pP0mcu1Fj7r3WmI0oerKcWCRSj4NsQNzBP6qyRNglcMCAuPsH-U7UzMqZMnPpNyiGHQtBVwRTd';
@@ -43,4 +46,9 @@ class MessagingController {
           'Authorization': 'key=$serverKey',
         },
       );
+
+  static void fcmSubscribe(String topic) {
+    fcm.subscribeToTopic(topic);
+    print("Subscribed");
+  }
 }

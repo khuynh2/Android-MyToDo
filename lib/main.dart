@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:term_project/controller/analyticcontroller.dart';
 import 'package:term_project/screen/adddailyscreen.dart';
 import 'package:term_project/screen/addtodo_screen.dart';
 import 'package:term_project/screen/adminscreen.dart';
@@ -32,6 +33,9 @@ class MyApp extends StatelessWidget {
             )),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
+      navigatorObservers: <NavigatorObserver>[
+        AnalyticController.analyticsObserver
+      ],
       routes: {
         SignInScreen.routeName: (context) => SignInScreen(),
         SignUpScreen.routeName: (context) => SignUpScreen(),

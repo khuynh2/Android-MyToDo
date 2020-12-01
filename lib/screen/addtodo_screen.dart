@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:term_project/controller/analyticcontroller.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
@@ -170,6 +171,8 @@ class _Controller {
 
       td.userId = await FireBaseController.addToDo(td);
       _state.todoList.insert(0, td);
+      AnalyticController ac = AnalyticController();
+      ac.logToDo(title, duedate.toIso8601String());
 
       Navigator.pop(_state.context);
     } catch (e) {

@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:term_project/controller/analyticcontroller.dart';
 import 'package:term_project/controller/controller.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/dailylist.dart';
@@ -273,9 +274,11 @@ class _Controller {
     try {
       _state.todoList[index].complete = value;
       await FireBaseController.updateToDoComp(value, _state.todoList, index);
+
       print(
           'complete ${_state.todoList[index].title} = ${_state.todoList[index].complete}');
       _state.render(() {});
+
       Future.delayed(Duration(seconds: 2), () {
         delete(index);
       });

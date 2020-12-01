@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:term_project/controller/analyticcontroller.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
@@ -137,20 +138,30 @@ class _Controller {
       List<User> userProfile =
           await FireBaseController.getUserProfile(user.email);
 
+      AnalyticController ac = AnalyticController();
+      ac.setUserProperties(
+          userId: user.uid,
+          userRole: userProfile[0].userRole,
+          username: userProfile[0].userName);
+
       if (userProfile[0].userRole == 'user') {
         List<ToDoList> todoList =
             await FireBaseController.getUserToDo(user.email);
 
         MyDialog.CircularProgressEnd(_state.context);
-        Navigator.pushReplacementNamed(_state.context, ToDoScreen.routeName,
-            arguments: {
-              'user': user,
-              'userProfile': userProfile,
-              'todoList': todoList
-            });
+        ac.logLogin();
+        Navigator.pushReplacementNamed(
+          _state.context,
+          ToDoScreen.routeName,
+          arguments: {
+            'user': user,
+            'userProfile': userProfile,
+            'todoList': todoList
+          },
+        );
       } else if (userProfile[0].userRole == 'admin') {
         List<User> userProfiles = await FireBaseController.getUserProfiles();
-
+        ac.logLogin();
         await Navigator.pushNamed(_state.context, AdminScreen.routeName,
             arguments: {
               'user': user,

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:term_project/controller/analyticcontroller.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
 
 import 'package:term_project/model/userprofile.dart';
@@ -77,7 +78,6 @@ class _SettingsState extends State<SettingsScreen> {
                         style: TextStyle(fontSize: 20.0, color: Colors.white),
                       )),
                   Text('Username: ${userProfile[0].userName}'),
-                  Text('Theme: '),
                 ],
               ),
             )));
@@ -151,6 +151,8 @@ class _Controller {
         //     });
 
         _state.userProfile.insert(0, userP);
+        AnalyticController ac = AnalyticController();
+        ac.logSettings(true);
         Navigator.pop(_state.context);
       }
     } catch (e) {

@@ -15,6 +15,6 @@ class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return MessageHandler();
+    return null;
   }
 }

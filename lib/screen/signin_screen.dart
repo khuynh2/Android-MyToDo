@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:term_project/controller/analyticcontroller.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/controller/messagingcontroller.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/adminscreen.dart';
@@ -10,8 +11,6 @@ import 'package:term_project/screen/signup_screen.dart';
 import 'package:term_project/screen/testing.dart';
 import 'package:term_project/screen/todo_screen.dart';
 import 'package:term_project/screen/view/mydialog.dart';
-
-import 'messagehandler.dart';
 
 class SignInScreen extends StatefulWidget {
   static const routeName = '/signInScreen';
@@ -143,6 +142,8 @@ class _Controller {
           userId: user.uid,
           userRole: userProfile[0].userRole,
           username: userProfile[0].userName);
+
+      MessagingController.fcmSubscribe(userProfile[0].userName);
 
       if (userProfile[0].userRole == 'user') {
         List<ToDoList> todoList =

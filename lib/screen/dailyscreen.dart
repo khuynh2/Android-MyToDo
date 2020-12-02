@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/controller/messagingcontroller.dart';
 import 'package:term_project/model/dailylist.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
@@ -9,6 +10,7 @@ import 'package:term_project/screen/adddailyscreen.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
 import 'package:term_project/screen/todo_screen.dart';
+import 'package:term_project/screen/view/messageviewuser.dart';
 import 'package:term_project/screen/view/mydialog.dart';
 
 import 'view/myimageview.dart';
@@ -109,37 +111,47 @@ class _DailyState extends State<DailyScreen> {
                 'Daily list',
                 style: TextStyle(fontSize: 30.0),
               )
-            : ListView.builder(
-                itemCount: dailyList.length,
-                itemBuilder: (BuildContext contet, int index) {
-                  if (con.dateCheck(index)) {
-                    return Container(
-                      padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                      child: Card(
-                          color: con
-                              .colors[con.colorChange(dailyList[index].streak)],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          elevation: 10,
-                          child: ListTile(
-                            leading: IconButton(
-                              icon: Icon(Icons.remove),
-                              onPressed: () => con.fail(index),
-                            ),
-                            title: Center(child: Text(dailyList[index].title)),
-                            subtitle: Text(
-                              dailyList[index].note.length == 0
-                                  ? ''
-                                  : dailyList[index].note,
-                            ),
-                            trailing: IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: () => con.success(index),
-                            ),
-                          )),
-                    );
-                  }
-                },
+            : Column(
+                children: <Widget>[
+                  Container(height: 0, child: MessageViewUser()),
+                  Expanded(
+                    child: ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: dailyList.length,
+                      itemBuilder: (BuildContext contet, int index) {
+                        if (con.dateCheck(index)) {
+                          return Container(
+                            padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                            child: Card(
+                                color: con.colors[
+                                    con.colorChange(dailyList[index].streak)],
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10)),
+                                elevation: 10,
+                                child: ListTile(
+                                  leading: IconButton(
+                                    icon: Icon(Icons.remove),
+                                    onPressed: () => con.fail(index),
+                                  ),
+                                  title: Center(
+                                      child: Text(dailyList[index].title)),
+                                  subtitle: Text(
+                                    dailyList[index].note.length == 0
+                                        ? ''
+                                        : dailyList[index].note,
+                                  ),
+                                  trailing: IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () => con.success(index),
+                                  ),
+                                )),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
               ));
   }
 }
@@ -160,6 +172,7 @@ class _Controller {
     } catch (e) {
       print('signOut exception: ${e.message}');
     }
+    MessagingController.fcmUnSubscribe(_state.userProfile[0].userName);
     Navigator.pushReplacementNamed(_state.context, SignInScreen.routeName);
   }
 

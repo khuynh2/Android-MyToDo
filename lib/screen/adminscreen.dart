@@ -6,8 +6,6 @@ import 'package:term_project/controller/messagingcontroller.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/view/messageview.dart';
 
-import 'messagehandler.dart';
-
 class AdminScreen extends StatefulWidget {
   static const routeName = '/adminScreen';
   @override

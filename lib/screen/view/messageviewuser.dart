@@ -68,8 +68,12 @@ class _MessageViewUserState extends State<MessageViewUser> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return SizedBox();
-  }
+  Widget build(BuildContext context) => ListView(
+        children: message.map(buildMessage).toList(),
+      );
+
+  Widget buildMessage(Message message) => ListTile(
+        title: Text(message.title),
+        subtitle: Text(message.body),
+      );
 }

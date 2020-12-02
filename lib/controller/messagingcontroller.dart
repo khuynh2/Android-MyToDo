@@ -51,4 +51,9 @@ class MessagingController {
     fcm.subscribeToTopic(topic);
     print("Subscribed");
   }
+
+  static void fcmUnSubscribe(String topic) {
+    fcm.unsubscribeFromTopic(topic);
+    print("UnSubscribed" + topic);
+  }
 }

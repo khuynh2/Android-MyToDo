@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:term_project/controller/analyticcontroller.dart';
 import 'package:term_project/controller/controller.dart';
 import 'package:term_project/controller/firebasecontroller.dart';
+import 'package:term_project/controller/messagingcontroller.dart';
 import 'package:term_project/model/dailylist.dart';
 import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
@@ -17,6 +18,7 @@ import 'package:term_project/screen/signin_screen.dart';
 import 'package:term_project/screen/testing.dart';
 import 'package:term_project/screen/view/myfilter.dart';
 
+import 'view/messageviewuser.dart';
 import 'view/mydialog.dart';
 import 'view/myimageview.dart';
 
@@ -52,7 +54,7 @@ class _ToDoState extends State<ToDoScreen> {
     user ??= arg['user'];
     userProfile ??= arg['userProfile'];
     todoList ??= arg['todoList'];
-
+    MessageViewUser();
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
@@ -125,55 +127,67 @@ class _ToDoState extends State<ToDoScreen> {
                   'My To Do list',
                   style: TextStyle(fontSize: 30.0),
                 )
-              : ListView.builder(
-                  itemCount: todoList.length,
-                  itemBuilder: (BuildContext contet, int index) {
-                    if (todoList[index].complete != true) {
-                      return Container(
-                        child: Container(
-                          padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10)),
-                            elevation: 10,
-                            child: ListTile(
-                              leading: Checkbox(
-                                  value: todoList[index].complete,
-                                  onChanged: (bool value) {
-                                    con.completeToDo(value, index);
-                                  }),
-                              title: Text(todoList[index].title),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    todoList[index].dueDate == null
-                                        ? ''
-                                        : todoList[index]
-                                            .dueDate
-                                            .toString()
-                                            .split("00:")
-                                            .first,
+              : Column(
+                  children: <Widget>[
+                    Container(height: 0, child: MessageViewUser()),
+                    Expanded(
+                      child: ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: todoList.length,
+                          itemBuilder: (BuildContext contet, int index) {
+                            if (todoList[index].complete != true) {
+                              return Container(
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                                  child: Card(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10)),
+                                    elevation: 10,
+                                    child: ListTile(
+                                      leading: Checkbox(
+                                          value: todoList[index].complete,
+                                          onChanged: (bool value) {
+                                            con.completeToDo(value, index);
+                                          }),
+                                      title: Text(todoList[index].title),
+                                      subtitle: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: <Widget>[
+                                          Text(
+                                            todoList[index].dueDate == null
+                                                ? ''
+                                                : todoList[index]
+                                                    .dueDate
+                                                    .toString()
+                                                    .split("00:")
+                                                    .first,
+                                          ),
+                                          Text(
+                                            todoList[index].note.length == 0
+                                                ? ''
+                                                : todoList[index].note,
+                                          ),
+                                        ],
+                                      ),
+                                      trailing: IconButton(
+                                        icon: Icon(Icons.mode_edit),
+                                        onPressed: () => con.editToDo(index),
+                                      ),
+                                    ),
                                   ),
-                                  Text(
-                                    todoList[index].note.length == 0
-                                        ? ''
-                                        : todoList[index].note,
-                                  ),
-                                ],
-                              ),
-                              trailing: IconButton(
-                                icon: Icon(Icons.mode_edit),
-                                onPressed: () => con.editToDo(index),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  })),
+                                ),
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          }),
+                    ),
+                  ],
+                )),
     );
   }
 }
@@ -190,6 +204,7 @@ class _Controller {
     } catch (e) {
       print('signOut exception: ${e.message}');
     }
+    MessagingController.fcmUnSubscribe(_state.userProfile[0].userName);
     Navigator.pushReplacementNamed(_state.context, SignInScreen.routeName);
   }
 

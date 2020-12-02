@@ -185,7 +185,7 @@ class _Controller {
   void todo() async {
     print(_state.todoList[0].email);
     try {
-      MyDialog.CircularProgressEnd(_state.context);
+      //MyDialog.CircularProgressEnd(_state.context);
       await Navigator.pushNamed(_state.context, ToDoScreen.routeName,
           arguments: {
             'user': _state.user,
@@ -194,7 +194,7 @@ class _Controller {
             //'dailyList': _state.dailyList
           });
     } catch (e) {
-      MyDialog.CircularProgressEnd(_state.context);
+      // MyDialog.CircularProgressEnd(_state.context);
       MyDialog.info(
         context: _state.context,
         title: 'Navigating error',

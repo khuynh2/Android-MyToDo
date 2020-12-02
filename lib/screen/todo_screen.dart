@@ -15,7 +15,7 @@ import 'package:term_project/screen/dailyscreen.dart';
 import 'package:term_project/screen/edittodo_screen.dart';
 import 'package:term_project/screen/settings_screen.dart';
 import 'package:term_project/screen/signin_screen.dart';
-import 'package:term_project/screen/testing.dart';
+
 import 'package:term_project/screen/view/myfilter.dart';
 
 import 'view/messageviewuser.dart';
@@ -105,11 +105,6 @@ class _ToDoState extends State<ToDoScreen> {
                   leading: Icon(Icons.exit_to_app),
                   title: Text('Sign out'),
                   onTap: con.signOut,
-                ),
-                ListTile(
-                  //leading: Icon(Icons.exit_to_app),
-                  title: Text('Testing'),
-                  onTap: con.test,
                 ),
               ],
             ),
@@ -237,15 +232,6 @@ class _Controller {
     //   Navigator.pop(_state.context);
   }
 
-  void test() async {
-    await Navigator.pushNamed(_state.context, Test.routeName,
-        arguments: {'user': _state.user, 'userProfile': _state.userProfile});
-    _state.render(() {});
-    // await _state.user.reload();
-
-    //   Navigator.pop(_state.context);
-  }
-
   void daily() async {
     try {
       List<DailyList> dailyList =
@@ -293,6 +279,8 @@ class _Controller {
       print(
           'complete ${_state.todoList[index].title} = ${_state.todoList[index].complete}');
       _state.render(() {});
+      AnalyticController ac = AnalyticController();
+      ac.logCompleteToDo(_state.todoList[index].title);
 
       Future.delayed(Duration(seconds: 2), () {
         delete(index);

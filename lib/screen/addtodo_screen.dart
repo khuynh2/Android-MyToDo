@@ -151,8 +151,8 @@ class _Controller {
   _Controller(this._state);
 
   String title;
-  String note;
-  List<dynamic> tags;
+  String note = '';
+  List<dynamic> tags = [];
   String uploadProgressMessage;
   DateTime duedate;
 
@@ -172,7 +172,8 @@ class _Controller {
       td.userId = await FireBaseController.addToDo(td);
       _state.todoList.insert(0, td);
       AnalyticController ac = AnalyticController();
-      ac.logToDo(title, duedate.toIso8601String());
+
+      ac.logToDo(title, duedate != null ? duedate.toIso8601String() : 'None');
 
       Navigator.pop(_state.context);
     } catch (e) {
@@ -180,7 +181,7 @@ class _Controller {
       MyDialog.info(
         context: _state.context,
         title: 'Error saving',
-        content: e.message ?? e.toString(),
+        content: e.toString(),
       );
     }
   }
@@ -196,7 +197,7 @@ class _Controller {
       duedate = pickDate;
       //print(duedate);
       _state.render(() {});
-    }
+    } else {}
   }
 
 //validator
@@ -222,7 +223,10 @@ class _Controller {
   }
 
   String onSavedNote(String value) {
-    this.note = value;
+    if (value != null) {
+      this.note = value;
+    } else
+      () => this.note = '';
   }
 
   String onSavedTags(String value) {

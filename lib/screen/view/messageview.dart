@@ -20,7 +20,7 @@ class _MessageViewState extends State<MessageView> {
   final TextEditingController bodyController =
       TextEditingController(text: 'Message');
   final TextEditingController topicController =
-      TextEditingController(text: 'Topic');
+      TextEditingController(text: 'Username');
   final List<Message> message = [];
   String msg = ' ';
 
@@ -89,7 +89,7 @@ class _MessageViewState extends State<MessageView> {
           ),
           TextFormField(
             controller: topicController,
-            decoration: InputDecoration(labelText: 'Topic'),
+            decoration: InputDecoration(labelText: 'Topic/Username'),
           ),
           RaisedButton(
             onPressed: con.sendNotificationTopic,

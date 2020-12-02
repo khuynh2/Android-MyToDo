@@ -8,7 +8,6 @@ import 'package:term_project/model/todolist.dart';
 import 'package:term_project/model/userprofile.dart';
 import 'package:term_project/screen/adminscreen.dart';
 import 'package:term_project/screen/signup_screen.dart';
-import 'package:term_project/screen/testing.dart';
 import 'package:term_project/screen/todo_screen.dart';
 import 'package:term_project/screen/view/mydialog.dart';
 

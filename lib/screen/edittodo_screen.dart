@@ -65,8 +65,9 @@ class _EditToDoState extends State<EditToDoScreen> {
                   child: Column(
                     children: <Widget>[
                       TextFormField(
+                        initialValue: todoList.title,
                         decoration: InputDecoration(
-                          hintText: todoList.title,
+                          hintText: 'Title',
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
                             borderSide: new BorderSide(),
@@ -80,10 +81,11 @@ class _EditToDoState extends State<EditToDoScreen> {
                         height: 5,
                       ),
                       TextFormField(
+                        initialValue: todoList.note.length == 0
+                            ? 'Description'
+                            : todoList.note,
                         decoration: InputDecoration(
-                          hintText: todoList.note.length == 0
-                              ? 'Description'
-                              : todoList.note,
+                          hintText: 'Description',
                           border: new OutlineInputBorder(
                             borderRadius: new BorderRadius.circular(25.0),
                             borderSide: new BorderSide(),
@@ -194,6 +196,8 @@ class _Controller {
     _state.formKey.currentState.save();
 
     try {
+      print('Date');
+      print(_state.todoList.dueDate);
       await FireBaseController.updateToDo(_state.todoList);
       Navigator.pop(_state.context);
     } catch (e) {
@@ -213,9 +217,12 @@ class _Controller {
         firstDate: _state.selectedDate,
         lastDate: DateTime(2022));
     if (pickDate != null && pickDate != _state.selectedDate) {
+      print(pickDate);
       _state.selectedDate = pickDate;
-      duedate = pickDate;
+      _state.todoList.dueDate = pickDate;
       _state.render(() {});
+    } else {
+      return null;
     }
   }
 
@@ -243,25 +250,21 @@ class _Controller {
 
 //save
   String onSavedTitle(String value) {
-    if (value != null) {
-      print("Testing **********");
-      print(value);
-      _state.todoList.title = value;
-    }
+    _state.todoList.title = value;
   }
 
   String onSavedNote(String value) {
     if (value != null) {
       _state.todoList.note = value;
-    }
+    } else
+      () => _state.todoList.note = '';
   }
 
   String onSavedTags(String value) {
     if (value.trim().length != 0 && value != null) {
+      print("Not null " + value);
       _state.todoList.tags
           .addAll(value.split(',').map((e) => e.trim()).toList());
-    } else {
-      return null;
-    }
+    } else {}
   }
 }

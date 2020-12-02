@@ -33,6 +33,13 @@ class AnalyticController extends ControllerMVC {
     });
   }
 
+  Future logCompleteToDo(String title) async {
+    await analytics
+        .logEvent(name: 'complete_todo', parameters: <String, dynamic>{
+      'Title': title,
+    });
+  }
+
   Future logSettings(bool changed) async {
     await analytics
         .logEvent(name: 'change_settings', parameters: <String, dynamic>{

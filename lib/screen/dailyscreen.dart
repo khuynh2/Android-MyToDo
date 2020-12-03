@@ -147,6 +147,8 @@ class _DailyState extends State<DailyScreen> {
                                   ),
                                 )),
                           );
+                        } else {
+                          return SizedBox();
                         }
                       },
                     ),
@@ -220,8 +222,8 @@ class _Controller {
 
   bool dateCheck(int index) {
     var now = new DateTime.now().weekday;
-    // print("Day:");
-    //print(_state.dailyList[index].weekDay[now - 1]);
+    print("Day:");
+    print(_state.dailyList[index].weekDay[now - 1]);
     if (_state.dailyList[index].weekDay[now - 1]) {
       print("Avaliable now:" + now.toString());
       return true;

@@ -141,7 +141,7 @@ class _Controller {
           userId: user.uid,
           userRole: userProfile[0].userRole,
           username: userProfile[0].userName);
-
+      MessagingController.fcmSubscribe('all');
       MessagingController.fcmSubscribe(userProfile[0].userName);
 
       if (userProfile[0].userRole == 'user') {

@@ -1,4 +1,5 @@
-# term_project
+# Scheduling & To Do List application
+
 
 A new Flutter project.
 

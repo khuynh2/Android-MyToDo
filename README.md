@@ -1,5 +1,7 @@
 # Scheduling & To Do List application
 
+## Description
+An Android Scheduling and ToDo list application 
 
 A new Flutter project.
 
